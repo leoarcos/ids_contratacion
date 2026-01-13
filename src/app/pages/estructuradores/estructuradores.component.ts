@@ -11,10 +11,19 @@ import Swal from 'sweetalert2';import PizZip from 'pizzip';
 import Docxtemplater from 'docxtemplater';
 import { saveAs } from 'file-saver';
 import JSZipUtils from 'jszip-utils';
+import { ModalInvitacionComponent } from '../components/modal-invitacion/modal-invitacion.component';
+import { ModalActaAprobacionComponent } from '../components/modal-acta-aprobacion/modal-acta-aprobacion.component';
+import { ModalActaInicioComponent } from '../components/modal-acta-inicio/modal-acta-inicio.component';
+import { ModalCRPComponent } from '../components/modal-crp/modal-crp.component';  
+import { ModalConceptoJueridicoComponent } from '../components/modal-concepto-jueridico/modal-concepto-jueridico.component';
+import { ModalDesignacionComponent } from '../components/modal-designacion/modal-designacion.component';
+import { ModalPropuestaComponent } from '../components/modal-propuesta/modal-propuesta.component';  
+import { ModalClausuladoComponent } from '../components/modal-clausulado/modal-clausulado.component';
+
 @Component({
   selector: 'app-estructuradores',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, NgSelectModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, NgSelectModule, ModalInvitacionComponent, ModalActaAprobacionComponent, ModalActaInicioComponent, ModalCRPComponent, ModalConceptoJueridicoComponent, ModalDesignacionComponent, ModalPropuestaComponent, ModalClausuladoComponent],
   templateUrl: './estructuradores.component.html',
   styleUrl: './estructuradores.component.css'
 })
@@ -1271,4 +1280,5 @@ export class EstructuradoresComponent {
       
       return this.Millones(enteros).trim();
   }
+  
 }

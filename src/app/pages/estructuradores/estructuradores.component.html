@@ -112,6 +112,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalInvitacion" >INVITACION</a></li>
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalPropuestaContrato" >PROPUESTA DE CONTRATO</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalClausulado" >CLAUSULADO</a></li>
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalConceptoJuridico" >CONCEPTO JURIDICO</a></li>
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalCRP" >CRP</a></li>
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalActaAprobacionGrantia" >ACTA DE APROBACIÓN DE GRANTIA</a></li>
@@ -148,14 +149,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-4">
-        <div class="mb-3">
-          <label class="form-label fw-bold">NÚMERO CDP</label>
-          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
-        </div>
-        <div>
-          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
-          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
-        </div>
+        <app-modal-invitacion></app-modal-invitacion>
+        
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
@@ -171,14 +166,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-4">
-        <div class="mb-3">
-          <label class="form-label fw-bold">NÚMERO CDP</label>
-          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
-        </div>
-        <div>
-          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
-          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
-        </div>
+        <app-modal-propuesta></app-modal-propuesta>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
@@ -194,14 +182,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-4">
-        <div class="mb-3">
-          <label class="form-label fw-bold">NÚMERO CDP</label>
-          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
-        </div>
-        <div>
-          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
-          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
-        </div>
+        <app-modal-concepto-jueridico></app-modal-concepto-jueridico>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
@@ -217,14 +198,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-4">
-        <div class="mb-3">
-          <label class="form-label fw-bold">NÚMERO CDP</label>
-          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
-        </div>
-        <div>
-          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
-          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
-        </div>
+        <app-modal-crp></app-modal-crp>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
@@ -240,14 +214,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-4">
-        <div class="mb-3">
-          <label class="form-label fw-bold">NÚMERO CDP</label>
-          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
-        </div>
-        <div>
-          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
-          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
-        </div>
+        <app-modal-acta-aprobacion></app-modal-acta-aprobacion>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
@@ -263,14 +230,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-4">
-        <div class="mb-3">
-          <label class="form-label fw-bold">NÚMERO CDP</label>
-          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
-        </div>
-        <div>
-          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
-          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
-        </div>
+        <app-modal-acta-inicio></app-modal-acta-inicio>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
@@ -286,14 +246,23 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-4">
-        <div class="mb-3">
-          <label class="form-label fw-bold">NÚMERO CDP</label>
-          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
-        </div>
-        <div>
-          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
-          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
-        </div>
+        <app-modal-designacion></app-modal-designacion>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+      </div>
+    </div>
+  </div>
+</div>  
+<div class="modal fade" id="modalClausulado" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">REGISTRAR CLAUSULADO</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <app-modal-clausulado></app-modal-clausulado>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
