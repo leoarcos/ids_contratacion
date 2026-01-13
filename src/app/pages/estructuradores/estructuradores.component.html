@@ -104,7 +104,21 @@
                 </div>
               </td>
               <td class="text-center">
-               
+               <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Registrar
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalInvitacion" >INVITACION</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalPropuestaContrato" >PROPUESTA DE CONTRATO</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalConceptoJuridico" >CONCEPTO JURIDICO</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalCRP" >CRP</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalActaAprobacionGrantia" >ACTA DE APROBACIÓN DE GRANTIA</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalActaInicio" >ACTA DE INICIO</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalDesignacionSupervisor" >DESIGNACIÓN DEL SUPERVISOR</a></li> 
+                    </ul>
+                </div>
               </td>
             </tr>
             <tr *ngIf="registrosFiltrados.length === 0">
@@ -126,11 +140,11 @@
   </div>
 </div>
  
-<div class="modal fade" id="modalCDP" tabindex="-1">
+<div class="modal fade" id="modalInvitacion" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-0 shadow">
       <div class="modal-header bg-warning">
-        <h5 class="modal-title fw-bold">REGISTRAR CDP</h5>
+        <h5 class="modal-title fw-bold">REGISTRAR INVITACION</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-4">
@@ -149,3 +163,141 @@
     </div>
   </div>
 </div> 
+<div class="modal fade" id="modalPropuestaContrato" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">REGISTRAR PROPUESTA DE CONTRATO</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NÚMERO CDP</label>
+          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
+        </div>
+        <div>
+          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
+          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+      </div>
+    </div>
+  </div>
+</div> 
+<div class="modal fade" id="modalConceptoJuridico" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">REGISTRAR CONCEPTO JURIDICO</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NÚMERO CDP</label>
+          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
+        </div>
+        <div>
+          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
+          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+      </div>
+    </div>
+  </div>
+</div> 
+<div class="modal fade" id="modalCRP" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">REGISTRAR CRP</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NÚMERO CDP</label>
+          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
+        </div>
+        <div>
+          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
+          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+      </div>
+    </div>
+  </div>
+</div> 
+<div class="modal fade" id="modalActaAprobacionGrantia" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">REGISTRAR ACTA DE APROBACIÓN DE GRANTIA</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NÚMERO CDP</label>
+          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
+        </div>
+        <div>
+          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
+          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+      </div>
+    </div>
+  </div>
+</div> 
+<div class="modal fade" id="modalActaInicio" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">REGISTRAR ACTA DE INICIO</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NÚMERO CDP</label>
+          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
+        </div>
+        <div>
+          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
+          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+      </div>
+    </div>
+  </div>
+</div> 
+<div class="modal fade" id="modalDesignacionSupervisor" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">REGISTRAR DESIGNACIÓN DEL SUPERVISOR</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NÚMERO CDP</label>
+          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
+        </div>
+        <div>
+          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
+          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+      </div>
+    </div>
+  </div>
+</div>  
