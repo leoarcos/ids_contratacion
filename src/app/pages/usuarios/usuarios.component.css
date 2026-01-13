@@ -1,0 +1,18 @@
+/* Colores del tab activo (solo para el ul con .tabs-danger) */
+.tabs-danger {
+  --bs-nav-tabs-link-active-bg: #dc3545 !important;
+  --bs-nav-tabs-link-active-color: #fff !important;
+  --bs-nav-tabs-link-active-border-color: #dc3545 #dc3545 transparent !important;
+}
+
+/* Si tu Bootstrap es más antiguo o otra regla pisa el color, refuerza así: */
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+  border-color: #dc3545 #dc3545 transparent !important;
+}
+.custom-thead{
+  background: #d70528 !important;
+  color: #fff !important;   /* texto blanco para contraste */
+}

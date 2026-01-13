@@ -1,0 +1,114 @@
+h4, h3 {
+  margin: 0;
+}
+canvas {
+  max-height: 300px;
+}
+/* Eliminar bordes arriba y abajo de los td */
+.custom-tbody td {
+  border-top: none !important;
+  border-bottom: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* Para el encabezado también */
+.custom-thead th {
+  border-top: none !important;
+  border-bottom: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.banner-container {
+  display: flex;
+  align-items: center;
+  /*background: linear-gradient(to right, #a50000, #d70528);*/
+  padding: 10px;
+  position: relative;
+  max-width: fit-content;
+  border-radius: 3px;
+}
+
+.banner-left {
+  background: #a50000;
+  color: white;
+  padding: 10px 15px;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: skew(-21deg); /* 👈 inclinación estilo cinta */
+}
+
+.banner-right {
+  background: white;
+  color: black;
+  padding: 10px 20px;
+  margin-left: 10px;
+  border-left: 5px solid #d70528;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+  transform: skew(-21deg); /* 👈 inclinación estilo cinta */
+  
+  box-shadow: 0 28px 28px rgba(0, 0, 0, 0.25); /* sombra gris */
+}
+
+.banner-right p {
+  margin: 0;
+  transform: skew(5deg); /* Corrige el texto para que no se vea inclinado */
+}
+
+
+.circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 18px;
+  color: #000;
+  box-shadow: 0 0 15px 5px rgba(0, 123, 255, 0.5);
+}
+
+.cusom-graficas{
+    background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 18px; 
+}
+.l-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 80px;
+  position: relative;
+  font-size: 0.85rem;
+  text-align: center;
+  color: #000;
+  font-weight: 500;
+  border-left: 8px solid transparent;
+  border-top: 8px solid transparent;
+}
+
+.l-orange {
+  border-color: #f39c12;
+}
+
+.l-yellow {
+  border-color: #f1c40f;
+}
+
+.l-green {
+  border-color: #27ae60;
+}
+
+.l-gray {
+  border-color: #7f8c8d;
+}
+

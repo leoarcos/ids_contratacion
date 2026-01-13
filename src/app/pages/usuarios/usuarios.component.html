@@ -1,0 +1,456 @@
+<div class="container-fluid my-4">
+    <!-- Encabezado -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-bold">Usuarios</h4>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a >Nombre sistema</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
+      </ol>
+    </nav>
+  </div>
+  
+  <!-- Tarjetas -->
+  <div class="row g-3">
+    <!-- Wallet Balance -->
+    <div class="col-md-12 col-sm-12">
+      <!-- Nav Tabs -->
+      <ul class="nav nav-tabs" id="usuarioTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active text-danger" id="registrar-tab" data-bs-toggle="tab"
+                  data-bs-target="#registrar" type="button" role="tab">
+            Registrar Usuario
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link text-danger" id="listar-tab" data-bs-toggle="tab"
+                  data-bs-target="#listar" type="button" role="tab">
+            Listar Usuarios
+          </button>
+        </li>
+      </ul>
+
+      <!-- Contenido de Tabs -->
+      <div class="tab-content p-3 border border-top-0" id="usuarioTabsContent">
+        
+        <!-- Registrar -->
+        <div class="tab-pane fade show active" id="registrar" role="tabpanel">
+          <h5 class="mb-3">Formulario de Registro</h5>
+          <form [formGroup]="usuarioForm" (ngSubmit)="abrirModalConfirmacion()">
+            <div class="row g-3">
+              <!-- Nombres -->
+              <!-- Rol -->
+              <div class="col-md-6">
+                <label class="form-label">Tipo identificación</label>
+                <select class="form-select"
+                        formControlName="tipoid"
+                        [ngClass]="{ 'is-invalid': submitted && f['tipoid'].errors }">
+                  
+                    <option value="CC">CC -Cedula de Ciudadania</option>
+                    <option value="CE">CE - Cédula de extranjería</option>
+                    <option value="CD">CD - Carné diplomático</option>
+                    <option value="PA">PA - Pasaporte</option>
+                    <option value="SC">SC - Salvoconducto</option>
+                    <option value="PE">PE - Permiso Especial de Permanencia</option> 
+                    <option value="PPT">PPT - Permiso por Protección Temporal</option>  
+                </select>
+                <div *ngIf="submitted && f['tipoid'].errors" class="invalid-feedback">
+                  <div *ngIf="f['tipoid'].errors['required']">El tipo identificación es requerido</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Número identificación</label>
+                <input type="text" class="form-control"
+                      formControlName="numid"
+                      [ngClass]="{ 'is-invalid': submitted && f['numid'].errors }">
+                <div *ngIf="submitted && f['numid'].errors" class="invalid-feedback">
+                  <div *ngIf="f['numid'].errors['required']">El número identificación es requerido</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Nombres</label>
+                <input type="text" class="form-control"
+                      formControlName="nombres"
+                      [ngClass]="{ 'is-invalid': submitted && f['nombres'].errors }">
+                <div *ngIf="submitted && f['nombres'].errors" class="invalid-feedback">
+                  <div *ngIf="f['nombres'].errors['required']">Los nombres son requeridos</div>
+                </div>
+              </div>
+
+
+              <!-- Teléfono -->
+              <div class="col-md-6">
+                <label class="form-label">Teléfono</label>
+                <input type="text" class="form-control"
+                      formControlName="telefono"
+                      [ngClass]="{ 'is-invalid': submitted && f['telefono'].errors }">
+                <div *ngIf="submitted && f['telefono'].errors" class="invalid-feedback">
+                  <div *ngIf="f['telefono'].errors['required']">El teléfono es requerido</div>
+                </div>
+              </div>
+
+              <!-- Correo -->
+              <div class="col-md-6">
+                <label class="form-label">Correo</label>
+                <input type="email" class="form-control"
+                      formControlName="correo"
+                      [ngClass]="{ 'is-invalid': submitted && f['correo'].errors }">
+                <div *ngIf="submitted && f['correo'].errors" class="invalid-feedback">
+                  <div *ngIf="f['correo'].errors['required']">El correo es requerido</div>
+                  <div *ngIf="f['correo'].errors['email']">El correo no es válido</div>
+                </div>
+              </div>
+              <!-- Contraseña -->
+              <div class="col-md-6">
+                <label class="form-label">Contraseña</label>
+                <input type="text" class="form-control"
+                      formControlName="password"
+                      [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
+                <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+                  <div *ngIf="f['password'].errors['required']">La contraseña es requerida</div>
+                  <div *ngIf="f['password'].errors['minlength']">
+                    La contraseña debe tener al menos 6 caracteres
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Rol -->
+              <div class="col-md-6">
+                <label class="form-label">Rol</label>
+                <select class="form-select"
+                        formControlName="rol"
+                        [ngClass]="{ 'is-invalid': submitted && f['rol'].errors }">
+                  <option value="">Seleccione un rol</option>
+                  <option value="Administrador">Administrador</option>
+                  <option value="Usuario Departamental">Usuario Departamental</option>
+                  <option value="Usuario Municipal">Usuario Municipal</option>
+                  <option value="Contratacion">Contratación</option>
+                  <option value="Direccion">Dirección</option>
+                  <option value="Presupuesto">Presupuesto</option>
+                  <option value="Supervisor">Supervisor</option>
+                </select>
+                <div *ngIf="submitted && f['rol'].errors" class="invalid-feedback">
+                  <div *ngIf="f['rol'].errors['required']">El rol es requerido</div>
+                </div>
+              </div>
+              
+              <!-- Rol -->
+              <div class="col-md-6"  >
+                <label class="form-label"   >Departamento/Municipio</label> 
+                <select class="form-select" 
+                        formControlName="mnpo"
+                        [ngClass]="{ 'is-invalid': submitted && f['mnpo'].errors }"> 
+                        <option *ngIf="f['rol'].value==''" value="">Selecciona un rol primero</option>
+                        <option *ngIf="f['rol'].value!=''" value="">Selecciona un valor</option>
+                        <option *ngIf="f['rol'].value!='Usuario Municipal'" value="NORTE DE SANTANDER">NORTE DE SANTANDER</option>   
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="ÁBREGO">ÁBREGO</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="ARBOLEDAS">ARBOLEDAS</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="BOCHALEMA">BOCHALEMA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="BUCARASICA">BUCARASICA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="CÁCOTA">CÁCOTA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="CACHIRÁ">CACHIRÁ</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="CHINÁCOTA">CHINÁCOTA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="CHITAGÁ">CHITAGÁ</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="CONVENCIÓN">CONVENCIÓN</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="CUCUTILLA">CUCUTILLA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="CÚCUTA">CÚCUTA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="DURANIA">DURANIA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="EL CARMEN">EL CARMEN</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="EL TARRA">EL TARRA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="EL ZULIA">EL ZULIA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="GRAMALOTE">GRAMALOTE</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="HACARÍ">HACARÍ</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="HERRÁN">HERRÁN</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="LABATECA">LABATECA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="LA ESPERANZA">LA ESPERANZA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="LA PLAYA DE BELÉN">LA PLAYA DE BELÉN</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="LOS PATIOS">LOS PATIOS</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="LOURDES">LOURDES</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="MUTISCUA">MUTISCUA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="OCAÑA">OCAÑA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="PAMPLONA">PAMPLONA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="PAMPLONITA">PAMPLONITA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="PUERTO SANTANDER">PUERTO SANTANDER</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="RAGONVALIA">RAGONVALIA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="SALAZAR DE LAS PALMAS">SALAZAR DE LAS PALMAS</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="SAN CALIXTO">SAN CALIXTO</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="SAN CAYETANO">SAN CAYETANO</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="SANTIAGO">SANTIAGO</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="SARDINATA">SARDINATA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="SILOS">SILOS</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="TEORAMA">TEORAMA</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="TIBÚ">TIBÚ</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="TOLEDO">TOLEDO</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="VILLA CARO">VILLA CARO</option>
+                        <option *ngIf="f['rol'].value=='Usuario Municipal'" value="VILLA DEL ROSARIO">VILLA DEL ROSARIO</option>
+    
+                  
+                </select>
+                <div *ngIf="submitted && f['mnpo'].errors" class="invalid-feedback">
+                  <div *ngIf="f['mnpo'].errors['required']">El departamento o municipio es requerido</div>
+                </div>
+              </div>
+              
+              <!-- Contraseña -->
+              <div class="col-md-12">
+                <label class="form-label">Institución</label>
+                <input type="text" class="form-control"
+                      formControlName="institucion"
+                      [ngClass]="{ 'is-invalid': submitted && f['institucion'].errors }">
+                <div *ngIf="submitted && f['institucion'].errors" class="invalid-feedback">
+                  <div *ngIf="f['institucion'].errors['required']">La institución es requerida</div>
+                  
+                </div>
+              </div>
+              
+            </div>
+
+
+            <div class="mt-3 text-end">
+              <button type="submit" class="btn btn-danger bg-gradient" [disabled]="submittedbtn">Registrar</button>
+            </div>
+          </form>
+        </div>
+        <!-- Listar -->
+        <div class="tab-pane fade" id="listar" role="tabpanel">
+            <h5 class="mb-3">Usuarios Registrados ({{usuarios.length}}) </h5>
+            <!-- 🔍 Buscador -->
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control" placeholder="Buscar usuario..."
+                    [(ngModel)]="searchText">
+            </div>
+            <!-- Contenedor responsivo con encabezado fijo -->
+            <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+                <table class="table   table-hover align-middle">
+                    <thead class="   sticky-top custom-head"   >
+                        <tr>
+                            <th scope="col" style="background:rgb(219, 36, 91); color:white;">Acción</th> 
+                            <th scope="col" style="background:rgb(219, 36, 91); color:white;">Nombres</th>
+                            <th scope="col" style="background:rgb(219, 36, 91); color:white;">Tipo ident.</th>
+                            <th scope="col" style="background:rgb(219, 36, 91); color:white;">Número ident.</th>
+                            <th scope="col" style="background:rgb(219, 36, 91); color:white;">Teléfono</th>
+                            <th scope="col" style="background:rgb(219, 36, 91); color:white;">Correo</th> 
+                            <th scope="col" style="background:rgb(219, 36, 91); color:white;">Rol</th>
+                            <th scope="col" style="background:rgb(219, 36, 91); color:white;">Departamento/Municipio</th>
+                            <th scope="col" style="background:rgb(219, 36, 91); color:white;">Institución</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let usuario of usuarios | filter:searchText; let i = index">
+                            <td class="text-center btn-group">
+                                <button class="btn btn-primary btn-sm " (click)="abrirEditarUsuario(usuario)"  data-bs-toggle="modal" data-bs-target="#editarUsuarioModal"  title="Editar">
+                                <i class="bi bi-pencil-square"></i> Editar
+                                </button>
+                                <button class="btn btn-danger btn-sm " (click)="eliminarUsuario(usuario)" title="Eliminar">
+                                <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                                <button *ngIf="usuario.estado==1" class="btn btn-secondary btn-sm" (click)="darDeBaja(usuario)" title="Dar de baja">
+                                <i class="bi bi-person-dash"></i> Dar baja
+                                </button>
+                                <button *ngIf="usuario.estado==0" class="btn btn-success btn-sm" (click)="activarUsuario(usuario)" title="ACtivar">
+                                <i class="bi bi-person-check"></i> Activar
+                                </button>
+                            </td> 
+                            <td>{{ usuario.nombres }}</td>
+                            <td>{{ usuario.tipoid }}</td>
+                            <td>{{ usuario.numid }}</td>
+                            <td>{{ usuario.telefono }}</td>
+                            <td>{{ usuario.correo }}</td> 
+                            <td>{{ usuario.rol }}</td>
+                            <td>{{ usuario.mnpo }}</td>
+                            <td>{{ usuario.institucion }}</td>
+                        </tr>
+                        <!-- Si no hay resultados -->
+                        <tr *ngIf="(usuarios | filter:searchText).length === 0">
+                            <td colspan="9" class="text-center text-muted">Sin datos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+ <!-- Modal Editar Usuario -->
+<div class="modal fade" id="editarUsuarioModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form [formGroup]="editarForm" (ngSubmit)="actualizarUsuario()">
+        <div class="modal-header bg-danger bg-gradient text-white">
+          <h5 class="modal-title">Editar Usuario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        
+        <div class="modal-body">
+            <div class="row g-3">
+                <!-- Nombres -->
+                <!-- Rol -->
+                <div class="col-md-6">
+                    <label class="form-label">Tipo identificación</label>
+                    <select class="form-select"
+                            formControlName="tipoid"
+                            [ngClass]="{ 'is-invalid': submitted && fe['tipoid'].errors }">
+                    
+                        <option value="CC">CC -Cedula de Ciudadania</option>
+                        <option value="CE">CE - Cédula de extranjería</option>
+                        <option value="CD">CD - Carné diplomático</option>
+                        <option value="PA">PA - Pasaporte</option>
+                        <option value="SC">SC - Salvoconducto</option>
+                        <option value="PE">PE - Permiso Especial de Permanencia</option> 
+                        <option value="PPT">PPT - Permiso por Protección Temporal</option>  
+                    </select>
+                    <div *ngIf="submitted && fe['tipoid'].errors" class="invalid-feedback">
+                    <div *ngIf="fe['tipoid'].errors['required']">El tipo identificación es requerido</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Número identificación</label>
+                    <input type="text" class="form-control"
+                        formControlName="numid"
+                        [ngClass]="{ 'is-invalid': submitted && fe['numid'].errors }">
+                    <div *ngIf="submitted && fe['numid'].errors" class="invalid-feedback">
+                    <div *ngIf="fe['numid'].errors['required']">El número identificación es requerido</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Nombres</label>
+                    <input type="text" class="form-control"
+                        formControlName="nombres"
+                        [ngClass]="{ 'is-invalid': submitted && fe['nombres'].errors }">
+                    <div *ngIf="submitted && fe['nombres'].errors" class="invalid-feedback">
+                    <div *ngIf="fe['nombres'].errors['required']">Los nombres son requeridos</div>
+                    </div>
+                </div>
+
+
+                <!-- Teléfono -->
+                <div class="col-md-6">
+                    <label class="form-label">Teléfono</label>
+                    <input type="text" class="form-control"
+                        formControlName="telefono"
+                        [ngClass]="{ 'is-invalid': submitted && fe['telefono'].errors }">
+                    <div *ngIf="submitted && fe['telefono'].errors" class="invalid-feedback">
+                    <div *ngIf="fe['telefono'].errors['required']">El teléfono es requerido</div>
+                    </div>
+                </div>
+
+                <!-- Correo -->
+                <div class="col-md-12">
+                    <label class="form-label">Correo</label>
+                    <input type="email" class="form-control"
+                        formControlName="correo"
+                        [ngClass]="{ 'is-invalid': submitted && fe['correo'].errors }">
+                    <div *ngIf="submitted && fe['correo'].errors" class="invalid-feedback">
+                    <div *ngIf="fe['correo'].errors['required']">El correo es requerido</div>
+                    <div *ngIf="fe['correo'].errors['email']">El correo no es válido</div>
+                    </div>
+                </div>
+                
+                
+                <!-- Rol -->
+                <div class="col-md-6">
+                    <label class="form-label">Rol</label>
+                    <select class="form-select"
+                            formControlName="rol"
+                            [ngClass]="{ 'is-invalid': submitted && fe['rol'].errors }">
+                    <option value="">Seleccione un rol</option>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Usuario Departamental">Usuario Departamental</option>
+                    <option value="Usuario Municipal">Usuario Municipal</option>
+                    <option value="Contratacion">Contratación</option>
+                    <option value="Direccion">Dirección</option>
+                    <option value="Presupuesto">Presupuesto</option>
+                    <option value="Supervisor">Supervisor</option>
+                    </select>
+                    <div *ngIf="submitted && fe['rol'].errors" class="invalid-feedback">
+                    <div *ngIf="fe['rol'].errors['required']">El rol es requerido</div>
+                    </div>
+                </div>
+                
+                <!-- Rol -->
+                <div class="col-md-6"  >
+                    <label class="form-label"  *ngIf="fe['rol'].value==''">Departamento/Municipio</label>
+                    <label class="form-label"  *ngIf="fe['rol'].value=='Usuario Municipal'">Municipio</label>
+                    <label class="form-label"   *ngIf="fe['rol'].value=='Usuario Departamental' || fe['rol'].value=='Administrador'">Departamento</label>
+                    <select class="form-select" 
+                            formControlName="mnpo"
+                            [ngClass]="{ 'is-invalid': submitted && fe['mnpo'].errors }"> 
+                            <option *ngIf="fe['rol'].value==''" value="">Selecciona un rol primero</option>
+                            <option *ngIf="fe['rol'].value!=''" value="">Selecciona un valor</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Departamental' || fe['rol'].value=='Administrador'" value="NORTE DE SANTANDER">NORTE DE SANTANDER</option>   
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="ÁBREGO">ÁBREGO</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="ARBOLEDAS">ARBOLEDAS</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="BOCHALEMA">BOCHALEMA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="BUCARASICA">BUCARASICA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="CÁCOTA">CÁCOTA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="CACHIRÁ">CACHIRÁ</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="CHINÁCOTA">CHINÁCOTA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="CHITAGÁ">CHITAGÁ</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="CONVENCIÓN">CONVENCIÓN</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="CUCUTILLA">CUCUTILLA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="CÚCUTA">CÚCUTA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="DURANIA">DURANIA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="EL CARMEN">EL CARMEN</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="EL TARRA">EL TARRA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="EL ZULIA">EL ZULIA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="GRAMALOTE">GRAMALOTE</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="HACARÍ">HACARÍ</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="HERRÁN">HERRÁN</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="LABATECA">LABATECA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="LA ESPERANZA">LA ESPERANZA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="LA PLAYA DE BELÉN">LA PLAYA DE BELÉN</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="LOS PATIOS">LOS PATIOS</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="LOURDES">LOURDES</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="MUTISCUA">MUTISCUA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="OCAÑA">OCAÑA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="PAMPLONA">PAMPLONA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="PAMPLONITA">PAMPLONITA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="PUERTO SANTANDER">PUERTO SANTANDER</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="RAGONVALIA">RAGONVALIA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="SALAZAR DE LAS PALMAS">SALAZAR DE LAS PALMAS</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="SAN CALIXTO">SAN CALIXTO</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="SAN CAYETANO">SAN CAYETANO</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="SANTIAGO">SANTIAGO</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="SARDINATA">SARDINATA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="SILOS">SILOS</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="TEORAMA">TEORAMA</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="TIBÚ">TIBÚ</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="TOLEDO">TOLEDO</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="VILLA CARO">VILLA CARO</option>
+                            <option *ngIf="fe['rol'].value=='Usuario Municipal'" value="VILLA DEL ROSARIO">VILLA DEL ROSARIO</option>
+        
+                    
+                    </select>
+                    <div *ngIf="submitted && fe['mnpo'].errors" class="invalid-feedback">
+                    <div *ngIf="fe['mnpo'].errors['required']">El departamento o municipio es requerido</div>
+                    </div>
+                </div>
+                
+                <!-- Contraseña -->
+                <div class="col-md-12">
+                    <label class="form-label">Institución</label>
+                    <input type="text" class="form-control"
+                        formControlName="institucion"
+                        [ngClass]="{ 'is-invalid': submitted && fe['institucion'].errors }">
+                    <div *ngIf="submitted && fe['institucion'].errors" class="invalid-feedback">
+                    <div *ngIf="fe['institucion'].errors['required']">La institución es requerida</div>
+                    
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger bg-gradient text-white">Actualizar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

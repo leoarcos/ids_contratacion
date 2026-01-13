@@ -1,0 +1,92 @@
+/* Banner Estilizado */
+.banner-container {
+    display: flex;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.banner-left {
+    width: 100px;
+}
+
+.banner-right {
+    flex: 1;
+}
+
+/* Tabla */
+.table thead th {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+}
+
+.table tbody td {
+    color: #444;
+    padding: 1rem 0.75rem;
+}
+
+/* Inputs */
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+}
+
+.form-label {
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 0.3rem;
+}
+
+/* Botones */
+.btn-primary {
+    background-color: #0d6efd;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+.modal-content {
+    border-radius: 20px;
+}
+
+/* Permite el salto de línea en las opciones del menú desplegable */
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+    white-space: normal !important; /* Anula el truncado con puntos suspensivos */
+    word-break: break-word !important; /* Rompe palabras largas si es necesario */
+    line-height: 1.2 !important; /* Ajusta el espacio entre líneas */
+    padding: 10px 15px !important; /* Da aire al texto para que sea legible */
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Ajusta el texto dentro de la opción seleccionada (el input) */
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-value {
+    white-space: normal !important;
+}
+.style-search {
+    margin-bottom: 1rem;
+}
+
+.style-search .form-control:focus {
+    box-shadow: none;
+    border-color: #dee2e6;
+}
+
+.input-group-text {
+    border-color: #dee2e6;
+}
+
+/* Animación para que los registros aparezcan suavemente al filtrar */
+tbody tr {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,147 @@
+<div class="container-fluid py-4">
+  <div class="banner-container">
+    <div class="banner-left bg-danger text-dark text-white">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+    </div>
+    <div class="banner-right border-danger">
+      <p class="h3 fw-bold">Alerta Amarilla</p>
+      <p class="text-muted">Reporte de Capacidad Operativa EBS/EES</p>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end mb-4 px-4">
+    <button class="btn btn-danger px-4 rounded-pill shadow fw-bold" 
+            data-bs-toggle="modal" data-bs-target="#modalAlerta" (click)="cancelarEdicion()">
+      <i class="bi bi-plus-lg me-2"></i>Nuevo Reporte Alerta
+    </button>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden mx-4">
+    <table class="table mb-0">
+      <thead class="custom-thead">
+        <tr>
+          <th>ESE / Municipio</th>
+          <th>EBS Contratados</th>
+          <th>EES Contratados</th>
+          <th>Fecha Inicio</th>
+          <th class="text-center" *ngIf="usuario$?.rol === 'Administrador'">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="custom-tbody">
+        <tr *ngFor="let r of registros">
+          <td>
+            <div class="fw-bold">{{ r.ese }}</div>
+            <small class="text-muted">{{ r.municipio }}</small>
+          </td>
+          <td><span class="badge bg-light text-dark border">{{ r.ebsContratados }} / {{ r.ebsAsignados }}</span></td>
+          <td><span class="badge bg-light text-dark border">{{ r.eesContratados }} / {{ r.eesAsignados }}</span></td>
+          <td>{{ r.ebsFechaInicio | date:'dd/MM/yyyy' }}</td>
+          <td class="text-center" *ngIf="usuario$?.rol === 'Administrador'">
+            <button class="btn btn-sm btn-light text-warning me-2" (click)="prepararEdicion(r)" data-bs-toggle="modal" data-bs-target="#modalAlerta">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-light text-danger" (click)="eliminar(r.id)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="registros.length === 0">
+            <td colspan="5" class="text-center py-5 text-muted">No se encontraron registros de alerta amarilla.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade" id="modalAlerta" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-danger text-dark border-0">
+        <h5 class="modal-title fw-bold text-white">REPORTE ALERTA AMARILLA - EBS Y EES</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4 bg-light">
+        <form class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">ESE</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevaAlerta.ese" name="ese" placeholder="Nombre de la ESE">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">MUNICIPIO</label>
+            <select class="form-select" [(ngModel)]="nuevaAlerta.municipio" name="muni">
+              <option *ngFor="let m of municipios" [value]="m">{{m}}</option>
+            </select>
+          </div>
+
+          <hr class="my-4">
+
+          <div class="col-md-12"><h6 class="text-warning fw-bold">EQUIPOS BÁSICOS DE SALUD (EBS)</h6></div>
+          <div class="col-md-3">
+            <label class="small fw-bold">ASIGNADOS</label>
+            <input type="number" class="form-control" [(ngModel)]="nuevaAlerta.ebsAsignados" name="ebsa">
+          </div>
+          <div class="col-md-3">
+            <label class="small fw-bold">CONTRATADOS</label>
+            <input type="number" class="form-control" [(ngModel)]="nuevaAlerta.ebsContratados" name="ebsc">
+          </div>
+          <div class="col-md-6">
+            <label class="small fw-bold">FECHA INICIO OPERACIÓN</label>
+            <input type="date" class="form-control" [(ngModel)]="nuevaAlerta.ebsFechaInicio" name="ebsf">
+          </div>
+          <div class="col-md-12">
+            <label class="small fw-bold">CONFORMACIÓN (PERFILES)</label>
+            <textarea class="form-control" rows="2" [(ngModel)]="nuevaAlerta.ebsConformacion" name="ebsp" placeholder="Ej: Médico, Enfermera, Auxiliar..."></textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="small fw-bold">MIGRANTES ATENDIDOS</label>
+            <input type="number" class="form-control" [(ngModel)]="nuevaAlerta.ebsMigrantesAtendidos" name="ebsm">
+          </div>
+          <div class="col-md-6">
+            <label class="small fw-bold">VÍCTIMAS CATATUMBO</label>
+            <input type="number" class="form-control" [(ngModel)]="nuevaAlerta.ebsVictimasCatatumbo" name="ebsv">
+          </div>
+          <div class="col-md-12">
+            <label class="small fw-bold">OBSERVACIONES EBS</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevaAlerta.ebsObservaciones" name="ebso">
+          </div>
+
+          <hr class="my-4">
+
+          <div class="col-md-12"><h6 class="text-warning fw-bold">EQUIPOS DE ESPECIALISTAS EN SALUD (EES)</h6></div>
+          <div class="col-md-3">
+            <label class="small fw-bold">ASIGNADOS</label>
+            <input type="number" class="form-control" [(ngModel)]="nuevaAlerta.eesAsignados" name="eesa">
+          </div>
+          <div class="col-md-3">
+            <label class="small fw-bold">CONTRATADOS</label>
+            <input type="number" class="form-control" [(ngModel)]="nuevaAlerta.eesContratados" name="eesc">
+          </div>
+          <div class="col-md-6">
+            <label class="small fw-bold">FECHA INICIO OPERACIÓN</label>
+            <input type="date" class="form-control" [(ngModel)]="nuevaAlerta.eesFechaInicio" name="eesf">
+          </div>
+          <div class="col-md-12">
+            <label class="small fw-bold">CONFORMACIÓN (PERFILES)</label>
+            <textarea class="form-control" rows="2" [(ngModel)]="nuevaAlerta.eesConformacion" name="eesp"></textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="small fw-bold">MIGRANTES ATENDIDOS</label>
+            <input type="number" class="form-control" [(ngModel)]="nuevaAlerta.eesMigrantesAtendidos" name="eesm">
+          </div>
+          <div class="col-md-6">
+            <label class="small fw-bold">VÍCTIMAS CATATUMBO</label>
+            <input type="number" class="form-control" [(ngModel)]="nuevaAlerta.eesVictimasCatatumbo" name="eesv">
+          </div>
+          <div class="col-md-12">
+            <label class="small fw-bold">OBSERVACIONES EES</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevaAlerta.eesObservaciones" name="eeso">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-success rounded-pill px-4 fw-bold" (click)="guardarRegistro()" data-bs-dismiss="modal">Guardar Reporte</button>
+      </div>
+    </div>
+  </div>
+</div>

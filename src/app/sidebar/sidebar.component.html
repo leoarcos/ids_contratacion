@@ -1,0 +1,105 @@
+
+<app-spinner *ngIf="loading"></app-spinner>
+  <!-- 🔹 Navbar fija (siempre visible) -->
+<nav class="navbar navbar-dark bg-danger fixed-top">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+
+   
+
+    <!-- Logo centrado -->
+    <div class="mx-auto">
+      <a class="navbar-brand d-flex align-items-end"> 
+        <span class="fw-bold">NOMBRE DEL SISTEMA</span> 
+      </a>
+    </div>
+
+    <!-- Botón menú (solo en móviles) -->
+    <button class="btn btn-primary d-md-none" (click)="toggleSidebar()">
+      ☰ MENU
+    </button>
+    <!-- Espaciador invisible (para balancear el botón en móviles) -->
+    <div class="d-md-none" style="width: 60px;"></div>
+  </div>
+</nav>
+
+<div class="sidebar-container" [class.open]="isOpen">
+  <div class="sidebar    text-white d-flex flex-column p-3 h-100">
+
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="mb-0">Menú</h4>
+      <button class="btn btn-sm btn-outline-light d-md-none" (click)="toggleSidebar()">✖</button>
+    </div>
+     <div class="text-center mb-3">
+      <img src="assets/img/logo-ids.png" alt="IDS Logo" class="img-fluid" style="max-height: 80px;">
+    </div>
+    <div *ngIf="usuario$">
+      <h4>Bienvenido {{ usuario$.nombres }}</h4>
+      <h5>Rol: {{ usuario$.rol }}</h5>
+      <p>{{ usuario$.mnpo }}</p> 
+    </div>
+   
+    <!-- Menú principal -->
+    <ul class="nav flex-column flex-grow-1">
+      <li class="nav-item">
+        <a class="nav-link text-white" routerLink="/dashboard" routerLinkActive="active" (click)="closeOnMobile()">
+          🏠 Inicio
+        </a>
+      </li>
+      <li class="nav-item"  *ngIf="usuario$?.rol === 'Usuario Municipal' || usuario$?.rol === 'Administrador'">
+        <a class="nav-link text-white" routerLink="/encuesta" routerLinkActive="active" (click)="closeOnMobile()">
+          📃 Encuesta fronteriza
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="usuario$?.rol === 'Administrador'">
+        <a class="nav-link text-white" routerLink="/amarilla" routerLinkActive="active" (click)="closeOnMobile()">
+          📃 Encuesta alerta amarilla
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="usuario$?.rol != 'Usuario Municipal'">
+        <a class="nav-link text-white" routerLink="/estudios-previos" routerLinkActive="active" (click)="closeOnMobile()">
+          📃 Estudios Previos
+        </a>
+      </li>
+      <!--
+      <li class="nav-item">
+        <a class="nav-link text-white" routerLink="/sivigilaEventos" routerLinkActive="active" (click)="closeOnMobile()">
+          📃 Eventos sivigila
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" routerLink="/pacientes" routerLinkActive="active">
+          👤 Pacientes
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" routerLink="/consultas" routerLinkActive="active">
+          📋 Consultas
+        </a>
+      </li>
+      -->
+      <li class="nav-item" *ngIf="usuario$?.rol === 'Administrador'">
+        <a class="nav-link text-white" routerLink="/usuarios" routerLinkActive="active" (click)="closeOnMobile()">
+          👥 Usuarios
+        </a>
+      </li>
+    </ul>
+
+    <!-- 🔹 Botón Cerrar Sesión al pie -->
+    <div class="mt-auto pt-3">
+      <button class="btn btn-danger w-100" (click)="cerrarSesion()">
+        <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Botón hamburguesa fijo -->
+<button class="btn bg-danger bg-gradient d-md-none toggle-btn" (click)="toggleSidebar()">
+  ☰ MENU
+</button>
+
+<!-- Contenido principal -->
+<main class="content p-3 mt-5">
+  <router-outlet></router-outlet>
+</main>

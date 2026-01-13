@@ -1,0 +1,715 @@
+<div class="container mt-4">
+  <h4>📂 Cargar Archivo Excel</h4>
+
+  <form (ngSubmit)="onSubmit()" #excelForm="ngForm">
+    <div class="mb-3">
+      <label for="excelFile" class="form-label">Seleccione un archivo Excel</label>
+      <input
+        type="file"
+        id="excelFile"
+        class="form-control"
+        (change)="onFileChange($event)"
+        accept=".xlsx,.xls"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="btnselectedFile">
+      <label *ngIf="!btnselectedFile">📥 Leer archivo</label>
+      <label *ngIf="btnselectedFile">Cargando</label>
+    </button>
+  </form>
+
+  <br>
+  <!-- Tarjetas  *ngIf="excelData.length > 0" -->
+  <div class="row g-3"  >
+    <!-- Wallet Balance -->
+    <div class="col-md-12 col-sm-12">
+      <!-- Nav Tabs -->
+      <ul class="nav nav-tabs" id="usuarioTabs" role="tablist" *ngIf="excelData.length > 0" >
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active text-danger" id="tabla-tab" data-bs-toggle="tab"
+                  data-bs-target="#tabla" type="button" role="tab">
+            Datos
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link text-danger" id="boletin-tab" data-bs-toggle="tab"
+                  data-bs-target="#boletin" type="button" role="tab">
+            Boletin
+          </button>
+        </li>
+      </ul>
+
+      <!-- Contenido de Tabs -->
+      <div class="tab-content p-3 border border-top-0" id="TabsContent">
+        
+        <!-- Registrar -->
+        <div class="tab-pane fade show active" id="tabla" role="tabpanel">
+            <div class="mt-4 " *ngIf="excelData.length > 0" >
+                <h5>✅ Datos extraídos: {{datosValidados[0]?.nom_eve}}</h5>
+                <h6> visualizando {{datosValidados.length}} registros validados de {{excelData.length}}.</h6>
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Buscar dato..."
+                        [(ngModel)]="searchText">
+                </div>
+                <div class="table-responsive"  style="max-height: 750px; overflow-y: auto;">
+                    <table class="table table-bordered table-striped">
+                        <thead class="sticky-top">
+                            <tr>
+                            <th *ngFor="let key of tableHeaders" style="background:rgb(219, 36, 91); color:white;">{{ key }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of datosValidados | filter:searchText;">
+                            <td *ngFor="let key of tableHeaders">{{ row[key] }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+        <!-- Listar -->
+        <div class="tab-pane fade " id="boletin" role="tabpanel"> 
+            <button class="btn btn-danger" (click)="imprimir()">🖨️ Imprimir</button>
+            
+            <div class="container-fluid p-3"style="width:800px;" >
+                <div id="contenidoImprimir" class="table-responsive">
+                    <table style="width:100%;">
+                        <thead id="encabezadoHojas">
+                            <tr>
+                                <td>
+                                <!-- Pega aquí tu encabezado -->
+                                
+                                    <div>
+                                        <div class="table-responsive" style="border-bottom: 2px #a50000 !important;">
+
+                                            <table style="width: 100%;" >
+                                                <tr>
+                                                    <td rowspan="2" class="text-center"> <img src="assets/img/logo1.png" alt="Logo IDS" class="img-fluid" style="max-height: 200px;"></td>
+                                                    <td class="text-center"> <img src="assets/img/logo_gober.png" alt="Logo IDS" class="img-fluid" style="max-height: 80px;"></td>
+                                                    <td class="text-left"> <img src="assets/img/logo-ids2.png" alt="Logo IDS" class="img-fluid" style="max-height: 170px;"></td>
+                                                </tr>
+                                                <tr> 
+                                                    <td class="text-center"> 
+                                                        <h4 class="text-danger fw-bold">Informe de evento</h4>
+                                                        <h3 class=" text-danger fw-bold">Sífilis Gestacional</h3>
+                                                    </td>
+                                                    <td class="">
+                                                        <div class="banner-container d-flex align-items-center">
+                                                            <!-- Sección izquierda con el número -->
+                                                            <div class="banner-left">
+                                                                <h2 class="fw-bold text-white m-0">VII</h2>
+                                                            </div>
+
+                                                            <!-- Sección derecha con el texto -->
+                                                            <div class="banner-right">
+                                                                <p class="m-0 fw-bold">
+                                                                Período Epidemiológico: Sem 01 - 28 <br>
+                                                                fecha de corte a 12 de Julio de 2025
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <!-- Encabezado -->
+                                        <hr style="color:#a50000; height: 4px; opacity: 1; border: none; background-color:#a50000;">
+
+                                        
+                                    </div>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                <!-- Todo tu contenido actual -->
+                                <!-- Número de Casos -->
+                                    <div class="text-center my-3">
+                                        <label class="text-warning fw-bold">N° de Casos &nbsp;</label>
+                                        <button class="btn btn-warning fw-bold">{{ totalCasos }} Casos</button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6 d-flex align-items-center">
+                                            <div class="row">
+                                                
+                                                <div class="col-md-2 col-sm-2 d-flex align-items-center">
+                                                    <img src="assets/img/vineta_boletin.png" alt="Logo IDS" class="img-fluid" style="max-height: 80px;">
+                                                </div>
+                                                <div class="col-md-10 col-sm-10 d-flex align-items-center">
+                                                    <h6 class="fw-bold mb-0">Comportamiento de Sífilis gestacional, Norte de Santander, periodo VII - 2025</h6>
+                                                </div>
+                                                
+                                            </div>
+                                        
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+
+                                        <!-- Tabla comparativa -->
+                                            <div class="table-responsive">
+                                                <table class="table table-sm table-bordered text-center align-middle w-auto mx-auto" style="font-size: 0.85rem;">
+                                                    <thead class="custom-thead">
+                                                        <tr>
+                                                            <th>Año</th>
+                                                            <th>Casos S.E <br>1-28</th>
+                                                            <th>Variación frente a<br>2025</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="custom-tbody">
+                                                        <tr>
+                                                            <td class="text-secondary"><b>2025</b></td>
+                                                            <td><b>307</b></td>
+                                                            <td>0,0</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-warning">2024</td>
+                                                            <td>260</td>
+                                                            <td class="text-success">37,3 ⬇️</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-primary">2023</td>
+                                                            <td>310</td>
+                                                            <td class="text-danger">44,5 ⬆️</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-sm-12">
+                                            <canvas id="casosChart"></canvas>
+                                        </div>
+                                        <div class="col-md-8 col-sm-8">
+                                            <div class="row">
+                                                
+                                                <div class="col-md-2 col-sm-2 d-flex align-items-center">
+                                                    <img src="assets/img/vineta_boletin.png" alt="Logo IDS" class="img-fluid" style="max-height: 80px;">
+                                                </div>
+                                                <div class="col-md-10 col-sm-10 d-flex align-items-center">
+                                                    <h6 class="fw-bold mb-0">Mapa de comportamiento inusual por municipio de residencia, Norte de Santander, periodo epidemiológico VII, 2025.</h6>
+                                                </div>
+                                                
+                                            </div>
+                                        </div> 
+                                        <div class="col-md-4 col-sm-4">
+
+                                        </div>
+                                        <div class="col-md-7 col-sm-7 text-center">
+                                            
+                                            <img src="assets/img/mapa_norte.jpg" alt="Logo IDS" class="img-fluid">
+                                        </div>
+                                        <div class="col-md-5 col-sm-5 align-items-center text-center">
+                                            <div class="row">
+                                                
+                                                <div class="col-md-12 col-sm-12   align-items-center text-center  ">
+                                                    <img src="assets/img/vineta_boletin.png" alt="Logo IDS" class="img-fluid" style="max-height: 80px;">
+                                                
+                                                    <strong class="fw-bold mb-0">INDICADORES</strong>
+                                                </div>
+                                                <div class="col-md-12 col-sm-12   text-center">
+                                                    <h6 class="fw-bold mb-0">Razón de prevalencia de sífilis gestacional por 1 000 nacido vivos </h6>
+                                                </div>
+                                                <div class="col-md-12 col-sm-12 d-flex justify-content-center align-items-center text-center gap-3" style="margin:1rem;">
+                                                    <img src="assets/img/img_emb.jpg" alt="Logo IDS" class="img-fluid" style="max-height: 150px;">
+                                                    <div class="circle">
+                                                        <span>15,0</span>
+                                                    </div>
+                                                </div>
+
+                                                
+                                                <div class="col-md-12 col-sm-12   align-items-center    ">
+                                                    <img src="assets/img/vineta_boletin.png" alt="Logo IDS" class="img-fluid" style="max-height: 80px;">
+                                                
+                                                    <strong class="fw-bold mb-0">Comportamientos Sociodemográficos de interés, Norte de Santander, periodo epidemiológico VII, 2025</strong>
+                                                </div> 
+                                                <div class="col-md-12 col-sm-12 d-flex align-items-center" style="height: 350px; width: 100%;">
+                                                    <canvas id="edadChart"></canvas>
+                                                </div>
+
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-12 col-sm-12   align-items-center    ">
+                                            <img src="assets/img/vineta_boletin.png" alt="Logo IDS" class="img-fluid" style="max-height: 80px;">
+                                        
+                                            <strong class="fw-bold mb-0">Comportamientos Sociodemográficos de interés, Norte de Santander, periodo epidemiológico VII, 2025</strong>
+                                        </div>
+                                        
+                                        <div class="col-md-12 col-sm-12   align-items-center    ">
+                                            <div class="container mt-4">
+                                                <div class="row">
+
+                                                    <!-- Columna izquierda con íconos y títulos -->
+                                                    <div class="col-md-3 text-end pe-4">
+                                                    <div class="mb-5">
+                                                        <img src="assets/img/tipo_regimen.png" alt="Logo IDS" class="img-fluid"  >
+                                                        <h6 class="fw-bold">Tipo de régimen en salud</h6>
+                                                    </div>
+                                                    <div class="mb-5">
+                                                        <img src="assets/img/area.png" alt="Logo IDS" class="img-fluid"  >
+                                                        <h6 class="fw-bold">Área</h6>
+                                                    </div>
+                                                    <div class="mb-5">
+                                                        <img src="assets/img/pert_etnica.png" alt="Logo IDS" class="img-fluid" style="max-height: 50px;" >
+                                                        <h6 class="fw-bold">Pertenencia étnica</h6>
+                                                    </div>
+                                                    </div>
+
+                                                    <!-- Columna derecha con bloques -->
+                                                    <div class="col-md-9">
+
+                                                    <!-- Tipo de régimen en salud -->
+                                                    <div class="d-flex flex-wrap mb-4">
+                                                        <div class="l-block l-orange me-4">
+                                                        <span>Subsidado<br><b>59,3%</b></span>
+                                                        </div>
+                                                        <div class="l-block l-yellow me-4">
+                                                        <span>No asegurado<br><b>24,8%</b></span>
+                                                        </div>
+                                                        <div class="l-block l-green me-4">
+                                                        <span>Contributivo<br><b>15,6%</b></span>
+                                                        </div>
+                                                        <div class="l-block l-gray">
+                                                        <span>Especial<br><b>0,3%</b></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Área -->
+                                                    <div class="d-flex flex-wrap mb-4">
+                                                        <div class="l-block l-orange me-4">
+                                                        <span>Cabecera Municipal<br><b>86,0%</b></span>
+                                                        </div>
+                                                        <div class="l-block l-yellow me-4">
+                                                        <span>Rural Disperso<br><b>6,8%</b></span>
+                                                        </div>
+                                                        <div class="l-block l-green">
+                                                        <span>Centro Poblado<br><b>7,2%</b></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Pertenencia étnica -->
+                                                    <div class="d-flex flex-wrap">
+                                                        <div class="l-block l-orange me-4">
+                                                        <span>Otros<br><b>99,0%</b></span>
+                                                        </div>
+                                                        <div class="l-block l-yellow me-4">
+                                                        <span>Indígena<br><b>1,0%</b></span>
+                                                        </div>
+                                                        <div class="l-block l-green">
+                                                        <span>Rom, Gitano<br><b>0%</b></span>
+                                                        </div>
+                                                    </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <!--
+                                        <div class="col-md-6 col-sm-6 d-flex justify-content-center align-items-center text-center gap-3" >
+                                            <img src="assets/img/tipo_regimen.png" alt="Logo IDS" class="img-fluid" style="height: 130px !important;" >
+                                            <div class="cusom-graficas">
+                                                <canvas id="regimenChart"></canvas>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 d-flex justify-content-center align-items-center text-center gap-3"  >
+                                            <img src="assets/img/area.png" alt="Logo IDS" class="img-fluid" style="height: 130px !important;" >
+                                            <div class="cusom-graficas">
+                                                <canvas id="areaChart"></canvas>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 d-flex justify-content-center align-items-center text-center gap-3"  >
+                                            <img src="assets/img/pert_etnica.png" alt="Logo IDS" class="img-fluid" style="height: 130px !important;" >
+                                            <div class="cusom-graficas">
+                                                <canvas id="etniaChart"></canvas>
+                                            </div>
+                                        </div>
+                                        -->
+                                        <div class="col-md-12 col-sm-12   align-items-center    ">
+                                            <img src="assets/img/vineta_boletin.png" alt="Logo IDS" class="img-fluid" style="max-height: 80px;">
+                                        
+                                            <strong class="fw-bold mb-0">Casos de Sífilis gestacional según su aseguramiento , Nacionalidad, Norte de Santander, periodo epidemiológico VII, 2025.</strong>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered text-center align-middle">
+                                                    <thead class="table-light custom-thead">
+                                                        <tr>
+                                                            <th>Aseguradora</th>
+                                                            <th>Casos COL.</th>
+                                                            <th>Casos VEN.</th>
+                                                            <th>Norte de Santander SE. 1-28</th>
+                                                            <th>Porcentaje</th>
+                                                            <th>Sem. E. 25-28</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="custom-tbody">
+                                                        <tr>
+                                                            <td>Nueva EPS</td>
+                                                            <td>79</td>
+                                                            <td>31</td>
+                                                            <td>110</td>
+                                                            <td>
+                                                            <div class="progress" style="height: 20px;">
+                                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 35.8%">
+                                                                35,8
+                                                                </div>
+                                                            </div>
+                                                            </td>
+                                                            <td>15</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>No Asegurado</td>
+                                                            <td>2</td>
+                                                            <td>74</td>
+                                                            <td>76</td>
+                                                            <td>
+                                                            <div class="progress" style="height: 20px;">
+                                                                <div class="progress-bar bg-warning" role="progressbar" style="width: 24.8%">
+                                                                24,8
+                                                                </div>
+                                                            </div>
+                                                            </td>
+                                                            <td>12</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Coosalud</td>
+                                                            <td>45</td>
+                                                            <td>6</td>
+                                                            <td>51</td>
+                                                            <td>
+                                                            <div class="progress" style="height: 20px;">
+                                                                <div class="progress-bar bg-info" role="progressbar" style="width: 16.6%">
+                                                                16,6
+                                                                </div>
+                                                            </div>
+                                                            </td>
+                                                            <td>7</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Comfaoriente</td>
+                                                            <td>34</td>
+                                                            <td>2</td>
+                                                            <td>36</td>
+                                                            <td>
+                                                            <div class="progress" style="height: 20px;">
+                                                                <div class="progress-bar bg-primary" role="progressbar" style="width: 11.7%">
+                                                                11,7
+                                                                </div>
+                                                            </div>
+                                                            </td>
+                                                            <td>6</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Sanitas</td>
+                                                            <td>29</td>
+                                                            <td>3</td>
+                                                            <td>32</td>
+                                                            <td>
+                                                            <div class="progress" style="height: 20px;">
+                                                                <div class="progress-bar bg-secondary" role="progressbar" style="width: 10.4%">
+                                                                10,4
+                                                                </div>
+                                                            </div>
+                                                            </td>
+                                                            <td>5</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Fuerzas Militares</td>
+                                                            <td>1</td>
+                                                            <td>0</td>
+                                                            <td>1</td>
+                                                            <td>
+                                                            <div class="progress" style="height: 20px;">
+                                                                <div class="progress-bar bg-success" role="progressbar" style="width: 0.3%">
+                                                                0,3
+                                                                </div>
+                                                            </div>
+                                                            </td>
+                                                            <td>1</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Salud Total</td>
+                                                            <td>0</td>
+                                                            <td>1</td>
+                                                            <td>1</td>
+                                                            <td>
+                                                            <div class="progress" style="height: 20px;">
+                                                                <div class="progress-bar bg-dark" role="progressbar" style="width: 0.3%">
+                                                                0,3
+                                                                </div>
+                                                            </div>
+                                                            </td>
+                                                            <td>0</td>
+                                                        </tr>
+                                                        <tr class="fw-bold table-secondary">
+                                                            <td>Norte de Santander</td>
+                                                            <td>190</td>
+                                                            <td>117</td>
+                                                            <td>307</td>
+                                                            <td>100,0</td>
+                                                            <td>43</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 col-sm-12   align-items-center    ">
+                                            <img src="assets/img/vineta_boletin.png" alt="Logo IDS" class="img-fluid" style="max-height: 80px;">
+                                        
+                                            <strong class="fw-bold mb-0">Casos de Sífilis gestacional por tipo de prueba y tratamiento suministrado, Norte de Santander, periodo epidemiológico VII, 2025.</strong>
+                                        </div>
+                                        
+                                        <div class="col-md-12 col-sm-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered text-center align-middle">
+                                                    <thead class="table-light custom-thead">
+                                                        <tr>
+                                                            <th>Tipo de Prueba Realizada</th>
+                                                            <th>Treponémica</th>
+                                                            <th>%</th>
+                                                            <th>No Treponémica</th>
+                                                            <th>%</th> 
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="custom-tbody">
+                                                        <tr>
+                                                            <td>Si</td>
+                                                            <td>307</td>
+                                                            <td>
+                                                                <div class="progress" style="height: 20px;">
+                                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 100%">
+                                                                    100,0
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>307</td> 
+                                                            <td>
+                                                                <div class="progress" style="height: 20px;">
+                                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 100%">
+                                                                    100,0
+                                                                    </div>
+                                                                </div>
+                                                            </td> 
+                                                        </tr>
+                                                        <tr>
+                                                            <td>No</td>
+                                                            <td>0</td>
+                                                            <td>
+                                                                <div class="progress" style="height: 20px;">
+                                                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 0%">
+                                                                    0,0
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>0</td>
+                                                            <td>
+                                                                <div class="progress" style="height: 20px;">
+                                                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 0%">
+                                                                    0,0
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 col-sm-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered text-center align-middle">
+                                                    <thead class="table-light custom-thead">
+                                                        <tr>
+                                                            <th>Número de dosis de Tratamiento</th>
+                                                            <th>Casos</th>
+                                                            <th>%</th>
+                                                            <th>Sin Tratamiento</th>
+                                                            <th>%</th> 
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="custom-tbody">
+                                                        <tr>
+                                                            <td>1 Dosis</td>
+                                                            <td>31</td>
+                                                            <td>
+                                                                <div class="progress" style="height: 20px;">
+                                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 100%">
+                                                                    10,1
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>70</td> 
+                                                            <td>
+                                                                <div class="progress" style="height: 20px;">
+                                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 100%">
+                                                                    22,8
+                                                                    </div>
+                                                                </div>
+                                                            </td> 
+                                                        </tr> 
+                                                        <tr>
+                                                            <td>2 Dosis</td>
+                                                            <td>2</td>
+                                                            <td>
+                                                                <div class="progress" style="height: 20px;">
+                                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 0,7%">
+                                                                    0,7
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>0</td> 
+                                                            <td>
+                                                                <div class="progress" style="height: 20px;">
+                                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 0%">
+                                                                    0
+                                                                    </div>
+                                                                </div>
+                                                            </td> 
+                                                        </tr> 
+                                                        <tr>
+                                                            <td>3 Dosis</td>
+                                                            <td>174</td>
+                                                            <td>
+                                                                <div class="progress" style="height: 20px;">
+                                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 56,7%">
+                                                                    56,7
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>0</td> 
+                                                            <td>
+                                                                <div class="progress" style="height: 20px;">
+                                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 0%">
+                                                                    0
+                                                                    </div>
+                                                                </div>
+                                                            </td> 
+                                                        </tr> 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                                
+                                        <div class="col-md-12 col-sm-12   align-items-center    ">
+                                            <img src="assets/img/vineta_boletin.png" alt="Logo IDS" class="img-fluid" style="max-height: 80px;">
+                                        
+                                            <strong class="fw-bold mb-0">Razón de prevalencia de casos de Sífilis Congénita por Municipio de Residencia, Nacionalidad, Norte de Santander, periodo epidemiológico VII, 2025.</strong>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered text-center align-middle">
+                                                    <thead class="table-light">
+                                                    <tr>
+                                                        <th>Municipio de Residencia</th>
+                                                        <th>Casos COL.</th>
+                                                        <th>Casos VEN.</th>
+                                                        <th>Total General SE.1-28</th>
+                                                        <th style="width: 300px;;">%</th>
+                                                        <th>NV+DF</th>
+                                                        <th>Razón de Prevalencia x 1000</th>
+                                                        <th>Sem. E. 25-28</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                        <tr *ngFor="let m of municipios" [ngClass]="{'fw-bold table-secondary': m.nombre === 'Norte de Santander'}">
+                                                            <td class="text-start">{{ m.nombre }}</td>
+                                                            <td>{{ m.casosCol }}</td>
+                                                            <td>{{ m.casosVen }}</td>
+                                                            <td><b>{{ m.total }}</b></td>
+                                                            
+                                                            <td>
+                                                                <div class="progress" style="height: 15px;">
+                                                                <div class="progress-bar bg-primary" role="progressbar"
+                                                                        [style.width.%]="(m.porcentaje / 35) * 100">
+                                                                    {{ m.porcentaje }}
+                                                                </div>
+                                                                </div>
+                                                            </td> 
+                                                            <td>{{ m.nvdf }}</td>
+                                                            <td>
+                                                                <div class="progress" style="height: 15px;">
+                                                                <div class="progress-bar bg-primary" role="progressbar"
+                                                                        [style.width.%]="(m.razonPrevalencia / 35) * 100">
+                                                                    {{ m.razonPrevalencia }}
+                                                                </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>{{ m.semana }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!--
+                <div >
+                    <div class="table-responsive" style="border-bottom: 2px #a50000 !important;">
+
+                        <table style="width: 100%;" >
+                            <tr>
+                                <td rowspan="2" class="text-center"> <img src="assets/img/logo1.png" alt="Logo IDS" class="img-fluid" style="max-height: 200px;"></td>
+                                <td class="text-center"> <img src="assets/img/logo_gober.png" alt="Logo IDS" class="img-fluid" style="max-height: 80px;"></td>
+                                <td class="text-left"> <img src="assets/img/logo-ids2.png" alt="Logo IDS" class="img-fluid" style="max-height: 170px;"></td>
+                            </tr>
+                            <tr> 
+                                <td class="text-center"> 
+                                    <h4 class="text-danger fw-bold">Informe de evento</h4>
+                                    <h3 class=" text-danger fw-bold">Sífilis Gestacional</h3>
+                                </td>
+                                <td class="">
+                                    <div class="banner-container d-flex align-items-center">
+                                         
+                                        <div class="banner-left">
+                                            <h2 class="fw-bold text-white m-0">VII</h2>
+                                        </div>
+ 
+                                        <div class="banner-right">
+                                            <p class="m-0 fw-bold">
+                                            Período Epidemiológico: Sem 01 - 28 <br>
+                                            fecha de corte a 12 de Julio de 2025
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                     
+                    <hr style="color:#a50000; height: 4px; opacity: 1; border: none; background-color:#a50000;">
+
+                    
+                </div>
+               
+
+            -->
+                
+
+            </div>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+  <!-- Mostrar datos leídos -->
+
+</div>

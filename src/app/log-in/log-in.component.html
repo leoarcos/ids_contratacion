@@ -1,0 +1,54 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
+    
+    <!-- Logo -->
+    <div class="text-center mb-3">
+      <img src="assets/img/logo-ids.png" alt="IDS Logo" class="img-fluid" style="max-height: 80px;">
+    </div>
+
+    <!-- Título -->
+    <h4 class="text-center mb-4">Ingreso al Sistema</h4>
+
+    <!-- Formulario -->
+    <form (ngSubmit)="onLogin()" [formGroup]="loginForm" novalidate>
+      
+      <!-- Correo -->
+      <div class="mb-3">
+        <label for="email" class="form-label">Correo electrónico</label>
+        <input id="email"
+               type="email"
+               formControlName="email"
+               class="form-control"
+               [ngClass]="{ 'is-invalid': submitted && form['email'].errors }">
+        <div *ngIf="submitted && form['email'].errors" class="invalid-feedback">
+          <div *ngIf="form['email'].errors['required']">El correo electrónico es requerido</div>
+          <div *ngIf="form['email'].errors['email']">El correo electrónico debe ser válido</div>
+        </div>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input id="password"
+               type="password"
+               formControlName="password"
+               class="form-control"
+               [ngClass]="{ 'is-invalid': submitted && form['password'].errors }">
+        <div *ngIf="submitted && form['password'].errors" class="invalid-feedback">
+          <div *ngIf="form['password'].errors['required']">La contraseña es requerida</div>
+        </div>
+      </div>
+
+      <!-- Botón -->
+      <div class="d-grid">
+        <button [disabled]="submittedbtn" type="submit" class="btn btn-primary btn-login">Iniciar sesión</button>
+      </div>
+    </form>
+
+    <!-- Olvidé contraseña -->
+    <div class="text-center mt-3">
+      <a href="javascript:void(0)" (click)="recuperarContrasena()">¿He olvidado la contraseña?</a>
+    </div>
+
+  </div>
+</div>

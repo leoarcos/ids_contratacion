@@ -1,0 +1,930 @@
+<div class="container-fluid py-4 bg-light min-vh-100">
+  <div class="banner-container mb-4 shadow-sm">
+    <div class="banner-left bg-danger text-white p-4">
+      <i class="bi bi-file-earmark-medical fs-1"></i>
+    </div>
+    <div class="banner-right border-start border-primary border-4 bg-white p-4">
+      <h2 class="fw-bold text-dark mb-0">ESTUDIOS PREVIOS</h2>
+      <p class="text-muted mb-0">Gestión de Análisis de Conveniencia y Oportunidad</p>
+    </div>
+  </div>
+
+  <div class="px-4">
+    <ul class="nav nav-tabs mb-3 border-0">
+      <li class="nav-item">
+        <button class="nav-link rounded-pill me-2 px-4 shadow-sm" 
+                [class.active]="pestanaActiva === 'TODOS'" 
+                (click)="cambiarPestana('TODOS')">
+          <i class="bi bi-clock-history me-2"></i>
+          <ng-container *ngIf="usuario$?.rol === 'Supervisor'">Todos</ng-container>
+          <ng-container *ngIf="usuario$?.rol !== 'Supervisor'">Pendientes</ng-container>
+        </button>
+      </li>
+      <li class="nav-item" *ngIf="usuario$?.rol === 'Supervisor'">
+        <button class="nav-link rounded-pill me-2 px-4 shadow-sm text-warning" 
+                [class.active]="pestanaActiva === 'PENDIENTES'" 
+                (click)="cambiarPestana('PENDIENTES')">
+          <i class="bi bi-clock-history me-2"></i>Pendientes
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link rounded-pill me-2 px-4 shadow-sm text-success" 
+                [class.active]="pestanaActiva === 'APROBADOS'" 
+                (click)="cambiarPestana('APROBADOS')">
+          <i class="bi bi-check-circle me-2"></i>Aprobados
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link rounded-pill me-2 px-4 shadow-sm text-danger" 
+                [class.active]="pestanaActiva === 'RECHAZADOS'" 
+                (click)="cambiarPestana('RECHAZADOS')">
+          <i class="bi bi-x-octagon me-2"></i>Rechazados
+        </button>
+      </li>
+    </ul>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+     
+      <button *ngIf="usuario$?.rol === 'ADMINISTRADOR' || usuario$?.rol === 'Supervisor'" class="btn btn-primary px-4 rounded-pill shadow" data-bs-toggle="modal" data-bs-target="#modalEstudio" (click)="cancelar()">
+        <i class="bi bi-plus-circle me-2"></i>Nuevo Estudio Previo
+      </button>
+    </div>
+
+    <div class="input-group style-search">
+      <span class="input-group-text bg-white border-end-0 rounded-start-pill ps-3">
+        <i class="bi bi-search text-muted"></i>
+      </span>
+      <input type="text" 
+            class="form-control border-start-0 rounded-end-pill py-2" 
+            placeholder="Buscar contratista, dependencia u objeto..." 
+            [(ngModel)]="filtroBusqueda" 
+            (input)="ejecutarBusqueda()">
+    </div>
+    <div *ngIf="pestanaActiva==='TODOS'" class="card border-0 shadow-sm rounded-4 overflow-hidden">
+       <h5 class="text-secondary fw-bold"><i class="bi bi-list-ul me-2"></i>
+
+        Registros&nbsp;
+       
+        <strong>({{ registrosFiltrados.length }})</strong>
+         
+      </h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-primary text-white">
+            <tr>
+              <th class="py-3 px-4">Contratista / Dependencia</th>
+              <th>Objeto</th>
+              <th>Valor Estimado</th>
+              <th>Estado</th>
+              <th class="text-center">Trámites</th>
+              <th class="text-center">Gestión</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let e of registrosFiltrados">
+              <td class="px-4">
+                <div class="fw-bold text-primary">{{ e.contratista }}</div>
+                <small class="text-muted">{{ e.dependencia }}</small>
+              </td>
+              <td><div class="text-truncate" style="max-width: 200px;">{{ e.objetoContrato }}</div></td>
+              <td class="fw-bold">{{ e.valorEstimado | currency }}</td>
+              <td>
+                <span class="badge rounded-pill" [ngClass]="{
+                  'bg-warning text-dark': e.estado === 'PENDIENTE',
+                  'bg-info text-white': e.estado === 'ENVIADO',
+                  'bg-success': e.estado === 'APROBADO',
+                  'bg-danger': e.estado === 'RECHAZADO'
+                }">{{ e.estado }}</span>
+                
+                <ng-container *ngIf="e.estado === 'RECHAZADO' ">
+                  <br>
+                  <span>Contratacion: {{ e.estadoContratacionRechazo }}.<br>Despacho: {{ e.estadoDireccionRechazo }}.<br>Presupuesto: {{ e.estadoPresupuestoRechazo }}</span>
+                </ng-container>
+              </td>
+              <td class="text-center">
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-outline-secondary" title="Necesidad del Servicio" (click)="generarWordNecesidad(e)" ><i class="bi bi-file-text"></i></button>
+                  <button class="btn btn-outline-secondary" title="Solicitud de Disponibilidad" (click)="generarWordSolicitud(e)" ><i class="bi bi-check2-square"></i></button>
+                  <button class="btn btn-outline-secondary" title="Constancia de Insuficiencia" (click)="generarWordInsuficiencia(e)" ><i class="bi bi-battery"></i></button>
+                  <button   class="btn btn-success" (click)="generarWordEstudio(e)"><i class="bi bi-download" ></i> <br>Estudio Previo</button>
+                </div>
+              </td>
+              <td class="text-center">
+               
+                <ng-container *ngIf="usuario$.rol=== 'Contratacion'">
+                  <button class="btn btn-sm btn-success me-1" (click)="cambiarEstadoContratacion(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                  <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoContratacion" ><i class="bi bi-x-lg"></i></button>
+                </ng-container>
+                <ng-container *ngIf="usuario$.rol=== 'Direccion' && e.estado!='RECHAZADO' ">
+                  <button class="btn btn-sm btn-success me-1" (click)="cambiarEstadoDireccion(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                  <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoDireccion" ><i class="bi bi-x-lg"></i></button>
+                </ng-container>
+                <ng-container *ngIf="usuario$.rol=== 'Presupuesto'">
+                  
+                  <button  class="btn btn-warning fw-bold" data-bs-toggle="modal" data-bs-target="#modalCDP" (click)="prepararCDP(e)">Registrar CDP</button>
+                  <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoPresupuesto" ><i class="bi bi-x-lg"></i></button>
+                </ng-container>
+                <ng-container *ngIf="e.estado === 'ENVIADO'">
+                  <button class="btn btn-sm btn-success me-1" (click)="cambiarEstado(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                  <button class="btn btn-sm btn-danger me-1" (click)="cambiarEstado(e, 'RECHAZADO')"><i class="bi bi-x-lg"></i></button>
+                </ng-container>
+                <ng-container *ngIf="e.estado === 'RECHAZADO' ">
+
+                    <button class="btn btn-sm btn-light text-primary me-1" (click)="prepararEdicion(e)" data-bs-toggle="modal" data-bs-target="#modalEstudio"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-light text-danger" (click)="eliminar(e.id)"><i class="bi bi-trash"></i></button>
+                   
+                </ng-container> 
+              </td>
+            </tr>
+            <tr *ngIf="registrosFiltrados.length === 0">
+                <td colspan="6" class="text-center py-5 text-muted">No se encontraron registros de estudios previos.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div *ngIf="pestanaActiva==='PENDIENTES'  " class="card border-0 shadow-sm rounded-4 overflow-hidden">
+       <h5 class="text-secondary fw-bold"><i class="bi bi-list-ul me-2"></i>
+
+        Registros pendientes de aprobación &nbsp;
+        <strong *ngIf="usuario$?.rol === 'Supervisor'">({{ registrosFiltrados.length }})</strong>
+        <strong *ngIf="usuario$?.rol !== 'Supervisor'">({{ registrosFiltradosPendientes.length }})</strong>
+         
+      </h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-primary text-white">
+            <tr>
+              <th class="py-3 px-4">Contratista / Dependencia</th>
+              <th>Objeto</th>
+              <th>Valor Estimado</th>
+              <th>Estado</th>
+              <th class="text-center">Trámites</th>
+              <th class="text-center">Gestión</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="usuario$?.rol != 'Supervisor'">
+              <ng-container *ngFor="let e of registrosFiltradosPendientes">
+                <tr >
+                  <td class="px-4">
+                    <div class="fw-bold text-primary">{{ e.contratista }}</div>
+                    <small class="text-muted">{{ e.dependencia }}</small>
+                  </td>
+                  <td><div class="text-truncate" style="max-width: 200px;">{{ e.objetoContrato }}</div></td>
+                  <td class="fw-bold">{{ e.valorEstimado | currency }}</td>
+                  <td>
+                    <span class="badge rounded-pill" [ngClass]="{
+                      'bg-warning text-dark': e.estado === 'PENDIENTE',
+                      'bg-info text-white': e.estado === 'ENVIADO',
+                      'bg-success': e.estado === 'APROBADO',
+                      'bg-danger': e.estado === 'RECHAZADO'
+                    }">{{ e.estado }}</span>
+                    
+                    <ng-container *ngIf="e.estado === 'RECHAZADO' ">
+                      <br>
+                      <span>Contratacion: {{ e.estadoContratacionRechazo }}.<br>Despacho: {{ e.estadoDireccionRechazo }}.<br>Presupuesto: {{ e.estadoPresupuestoRechazo }}</span>
+                    </ng-container>
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm">
+                      <button class="btn btn-outline-secondary" title="Necesidad del Servicio" (click)="generarWordNecesidad(e)" ><i class="bi bi-file-text"></i></button>
+                      <button class="btn btn-outline-secondary" title="Solicitud de Disponibilidad" (click)="generarWordSolicitud(e)" ><i class="bi bi-check2-square"></i></button>
+                      <button class="btn btn-outline-secondary" title="Constancia de Insuficiencia" (click)="generarWordInsuficiencia(e)" ><i class="bi bi-battery"></i></button>
+                      <button   class="btn btn-success" (click)="generarWordEstudio(e)"><i class="bi bi-download" ></i> <br>Estudio Previo</button>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                  
+                    <ng-container *ngIf="usuario$.rol=== 'Contratacion'">
+                      <button class="btn btn-sm btn-success me-1" (click)="cambiarEstadoContratacion(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoContratacion" ><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="usuario$.rol=== 'Direccion' && e.estado!='RECHAZADO' ">
+                      <button class="btn btn-sm btn-success me-1" (click)="cambiarEstadoDireccion(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoDireccion" ><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="usuario$.rol=== 'Presupuesto'">
+                      
+                      <button  class="btn btn-warning fw-bold" data-bs-toggle="modal" data-bs-target="#modalCDP" (click)="prepararCDP(e)">Registrar CDP</button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoPresupuesto" ><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="e.estado === 'ENVIADO'">
+                      <button class="btn btn-sm btn-success me-1" (click)="cambiarEstado(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="cambiarEstado(e, 'RECHAZADO')"><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="e.estado === 'RECHAZADO' ">
+
+                        <button class="btn btn-sm btn-light text-primary me-1" (click)="prepararEdicion(e)" data-bs-toggle="modal" data-bs-target="#modalEstudio"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-light text-danger" (click)="eliminar(e.id)"><i class="bi bi-trash"></i></button>
+                      
+                    </ng-container> 
+                  </td>
+                </tr>
+              </ng-container>
+              <tr *ngIf="registrosFiltrados.length === 0">
+                  <td colspan="6" class="text-center py-5 text-muted">No se encontraron registros de estudios previos.</td>
+              </tr>
+
+            </ng-container> 
+            <ng-container *ngIf="usuario$?.rol === 'Supervisor'">
+              <ng-container *ngFor="let e of registrosFiltrados">
+                <tr *ngIf="e.estado === 'PENDIENTE'">
+                  <td class="px-4">
+                    <div class="fw-bold text-primary">{{ e.contratista }}</div>
+                    <small class="text-muted">{{ e.dependencia }}</small>
+                  </td>
+                  <td><div class="text-truncate" style="max-width: 200px;">{{ e.objetoContrato }}</div></td>
+                  <td class="fw-bold">{{ e.valorEstimado | currency }}</td>
+                  <td>
+                    <span class="badge rounded-pill" [ngClass]="{
+                      'bg-warning text-dark': e.estado === 'PENDIENTE',
+                      'bg-info text-white': e.estado === 'ENVIADO',
+                      'bg-success': e.estado === 'APROBADO',
+                      'bg-danger': e.estado === 'RECHAZADO'
+                    }">{{ e.estado }}</span>
+                    
+                    <ng-container *ngIf="e.estado === 'RECHAZADO' ">
+                      <br>
+                      <span>Contratacion: {{ e.estadoContratacionRechazo }}.<br>Despacho: {{ e.estadoDireccionRechazo }}.<br>Presupuesto: {{ e.estadoPresupuestoRechazo }}</span>
+                    </ng-container>
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm">
+                      <button class="btn btn-outline-secondary" title="Necesidad del Servicio" (click)="generarWordNecesidad(e)" ><i class="bi bi-file-text"></i></button>
+                      <button class="btn btn-outline-secondary" title="Solicitud de Disponibilidad" (click)="generarWordSolicitud(e)" ><i class="bi bi-check2-square"></i></button>
+                      <button class="btn btn-outline-secondary" title="Constancia de Insuficiencia" (click)="generarWordInsuficiencia(e)" ><i class="bi bi-battery"></i></button>
+                      <button   class="btn btn-success" (click)="generarWordEstudio(e)"><i class="bi bi-download" ></i> <br>Estudio Previo</button>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                  
+                    <ng-container *ngIf="usuario$.rol=== 'Contratacion'">
+                      <button class="btn btn-sm btn-success me-1" (click)="cambiarEstadoContratacion(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoContratacion" ><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="usuario$.rol=== 'Direccion' && e.estado!='RECHAZADO' ">
+                      <button class="btn btn-sm btn-success me-1" (click)="cambiarEstadoDireccion(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoDireccion" ><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="usuario$.rol=== 'Presupuesto'">
+                      
+                      <button  class="btn btn-warning fw-bold" data-bs-toggle="modal" data-bs-target="#modalCDP" (click)="prepararCDP(e)">Registrar CDP</button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoPresupuesto" ><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="e.estado === 'ENVIADO'">
+                      <button class="btn btn-sm btn-success me-1" (click)="cambiarEstado(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="cambiarEstado(e, 'RECHAZADO')"><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="e.estado === 'RECHAZADO' ">
+
+                        <button class="btn btn-sm btn-light text-primary me-1" (click)="prepararEdicion(e)" data-bs-toggle="modal" data-bs-target="#modalEstudio"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-light text-danger" (click)="eliminar(e.id)"><i class="bi bi-trash"></i></button>
+                      
+                    </ng-container> 
+                  </td>
+                </tr>
+              </ng-container>
+              <tr *ngIf="registrosFiltrados.length === 0">
+                  <td colspan="6" class="text-center py-5 text-muted">No se encontraron registros de estudios previos.</td>
+              </tr>
+
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div *ngIf="pestanaActiva==='APROBADOS'  " class="card border-0 shadow-sm rounded-4 overflow-hidden">
+       <h5 class="text-secondary fw-bold"><i class="bi bi-list-ul me-2"></i>
+
+        Registros aprobados&nbsp; 
+        <strong *ngIf="usuario$?.rol === 'Supervisor'">({{ registrosFiltrados.length }})</strong>
+        <strong *ngIf="usuario$?.rol !== 'Supervisor'">({{ registrosFiltradosAprobados .length }})</strong>
+         
+      </h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-primary text-white">
+            <tr>
+              <th class="py-3 px-4">Contratista / Dependencia</th>
+              <th>Objeto</th>
+              <th>Valor Estimado</th>
+              <th>Estado</th>
+              <th class="text-center">Trámites</th> 
+            </tr>
+          </thead>
+          <tbody>
+            
+            <ng-container *ngIf="usuario$?.rol != 'Supervisor'">
+              <ng-container *ngFor="let e of registrosFiltradosAprobados">
+                <tr >
+                  <td class="px-4">
+                    <div class="fw-bold text-primary">{{ e.contratista }}</div>
+                    <small class="text-muted">{{ e.dependencia }}</small>
+                  </td>
+                  <td><div class="text-truncate" style="max-width: 200px;">{{ e.objetoContrato }}</div></td>
+                  <td class="fw-bold">{{ e.valorEstimado | currency }}</td>
+                  <td>
+                    <span class="badge rounded-pill" [ngClass]="{
+                      'bg-warning text-dark': e.estado === 'PENDIENTE',
+                      'bg-info text-white': e.estado === 'ENVIADO',
+                      'bg-success': e.estado === 'APROBADO',
+                      'bg-danger': e.estado === 'RECHAZADO'
+                    }">{{ e.estado }}</span>
+                    
+                    <ng-container *ngIf="e.estado === 'RECHAZADO' ">
+                      <br>
+                      <span>Contratacion: {{ e.estadoContratacionRechazo }}.<br>Despacho: {{ e.estadoDireccionRechazo }}.<br>Presupuesto: {{ e.estadoPresupuestoRechazo }}</span>
+                    </ng-container>
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm">
+                      <button class="btn btn-outline-secondary" title="Necesidad del Servicio" (click)="generarWordNecesidad(e)" ><i class="bi bi-file-text"></i></button>
+                      <button class="btn btn-outline-secondary" title="Solicitud de Disponibilidad" (click)="generarWordSolicitud(e)" ><i class="bi bi-check2-square"></i></button>
+                      <button class="btn btn-outline-secondary" title="Constancia de Insuficiencia" (click)="generarWordInsuficiencia(e)" ><i class="bi bi-battery"></i></button>
+                      <button   class="btn btn-success" (click)="generarWordEstudio(e)"><i class="bi bi-download" ></i> <br>Estudio Previo</button>
+                    </div>
+                  </td> 
+                </tr>
+              </ng-container>
+              <tr *ngIf="registrosFiltrados.length === 0">
+                  <td colspan="6" class="text-center py-5 text-muted">No se encontraron registros de estudios previos.</td>
+              </tr>
+
+            </ng-container> 
+            <ng-container *ngIf="usuario$?.rol === 'Supervisor'">
+              <ng-container *ngFor="let e of registrosFiltrados">
+                <tr *ngIf="e.estado === 'APROBADO'">
+                  <td class="px-4">
+                    <div class="fw-bold text-primary">{{ e.contratista }}</div>
+                    <small class="text-muted">{{ e.dependencia }}</small>
+                  </td>
+                  <td><div class="text-truncate" style="max-width: 200px;">{{ e.objetoContrato }}</div></td>
+                  <td class="fw-bold">{{ e.valorEstimado | currency }}</td>
+                  <td>
+                    <span class="badge rounded-pill" [ngClass]="{
+                      'bg-warning text-dark': e.estado === 'PENDIENTE',
+                      'bg-info text-white': e.estado === 'ENVIADO',
+                      'bg-success': e.estado === 'APROBADO',
+                      'bg-danger': e.estado === 'RECHAZADO'
+                    }">{{ e.estado }}</span>
+                    
+                    <ng-container *ngIf="e.estado === 'RECHAZADO' ">
+                      <br>
+                      <span>Contratacion: {{ e.estadoContratacionRechazo }}.<br>Despacho: {{ e.estadoDireccionRechazo }}.<br>Presupuesto: {{ e.estadoPresupuestoRechazo }}</span>
+                    </ng-container>
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm">
+                      <button class="btn btn-outline-secondary" title="Necesidad del Servicio" (click)="generarWordNecesidad(e)" ><i class="bi bi-file-text"></i></button>
+                      <button class="btn btn-outline-secondary" title="Solicitud de Disponibilidad" (click)="generarWordSolicitud(e)" ><i class="bi bi-check2-square"></i></button>
+                      <button class="btn btn-outline-secondary" title="Constancia de Insuficiencia" (click)="generarWordInsuficiencia(e)" ><i class="bi bi-battery"></i></button>
+                      <button   class="btn btn-success" (click)="generarWordEstudio(e)"><i class="bi bi-download" ></i> <br>Estudio Previo</button>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                  
+                    <ng-container *ngIf="usuario$.rol=== 'Contratacion'">
+                      <button class="btn btn-sm btn-success me-1" (click)="cambiarEstadoContratacion(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoContratacion" ><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="usuario$.rol=== 'Direccion' && e.estado!='RECHAZADO' ">
+                      <button class="btn btn-sm btn-success me-1" (click)="cambiarEstadoDireccion(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoDireccion" ><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="usuario$.rol=== 'Presupuesto'">
+                      
+                      <button  class="btn btn-warning fw-bold" data-bs-toggle="modal" data-bs-target="#modalCDP" (click)="prepararCDP(e)">Registrar CDP</button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoPresupuesto" ><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="e.estado === 'ENVIADO'">
+                      <button class="btn btn-sm btn-success me-1" (click)="cambiarEstado(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="cambiarEstado(e, 'RECHAZADO')"><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="e.estado === 'RECHAZADO' ">
+
+                        <button class="btn btn-sm btn-light text-primary me-1" (click)="prepararEdicion(e)" data-bs-toggle="modal" data-bs-target="#modalEstudio"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-light text-danger" (click)="eliminar(e.id)"><i class="bi bi-trash"></i></button>
+                      
+                    </ng-container> 
+                  </td>
+                </tr>
+              </ng-container>
+              <tr *ngIf="registrosFiltrados.length === 0">
+                  <td colspan="6" class="text-center py-5 text-muted">No se encontraron registros de estudios previos.</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div *ngIf="pestanaActiva==='RECHAZADOS'  " class="card border-0 shadow-sm rounded-4 overflow-hidden">
+       <h5 class="text-secondary fw-bold"><i class="bi bi-list-ul me-2"></i>
+
+        Registros rechazados&nbsp;
+        <strong *ngIf="usuario$?.rol === 'Supervisor'">({{ registrosFiltrados.length }})</strong>
+        <strong *ngIf="usuario$?.rol !== 'Supervisor'">({{ registrosFiltradosRechazados.length }})</strong>
+         
+      </h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-primary text-white">
+            <tr>
+              <th class="py-3 px-4">Contratista / Dependencia</th>
+              <th>Objeto</th>
+              <th>Valor Estimado</th>
+              <th>Estado</th>
+              <th class="text-center">Trámites</th> 
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="usuario$?.rol != 'Supervisor'">
+              
+              <ng-container *ngFor="let e of registrosFiltradosRechazados">
+                <tr  >
+                  <td class="px-4">
+                    <div class="fw-bold text-primary">{{ e.contratista }}</div>
+                    <small class="text-muted">{{ e.dependencia }}</small>
+                  </td>
+                  <td><div class="text-truncate" style="max-width: 200px;">{{ e.objetoContrato }}</div></td>
+                  <td class="fw-bold">{{ e.valorEstimado | currency }}</td>
+                  <td>
+                    <span class="badge rounded-pill" [ngClass]="{
+                      'bg-warning text-dark': e.estado === 'PENDIENTE',
+                      'bg-info text-white': e.estado === 'ENVIADO',
+                      'bg-success': e.estado === 'APROBADO',
+                      'bg-danger': e.estado === 'RECHAZADO'
+                    }">{{ e.estado }}</span>
+                    
+                    <ng-container *ngIf="e.estado === 'RECHAZADO' ">
+                      <br>
+                      <span>Contratacion: {{ e.estadoContratacionRechazo }}.<br>Despacho: {{ e.estadoDireccionRechazo }}.<br>Presupuesto: {{ e.estadoPresupuestoRechazo }}</span>
+                    </ng-container>
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm">
+                      <button class="btn btn-outline-secondary" title="Necesidad del Servicio" (click)="generarWordNecesidad(e)" ><i class="bi bi-file-text"></i></button>
+                      <button class="btn btn-outline-secondary" title="Solicitud de Disponibilidad" (click)="generarWordSolicitud(e)" ><i class="bi bi-check2-square"></i></button>
+                      <button class="btn btn-outline-secondary" title="Constancia de Insuficiencia" (click)="generarWordInsuficiencia(e)" ><i class="bi bi-battery"></i></button>
+                      <button   class="btn btn-success" (click)="generarWordEstudio(e)"><i class="bi bi-download" ></i> <br>Estudio Previo</button>
+                    </div>
+                  </td>  
+                </tr>
+
+              </ng-container>
+              <tr *ngIf="registrosFiltrados.length === 0">
+                  <td colspan="6" class="text-center py-5 text-muted">No se encontraron registros de estudios previos.</td>
+              </tr>
+              
+            </ng-container>
+            <ng-container *ngIf="usuario$?.rol === 'Supervisor'">
+              
+              <ng-container *ngFor="let e of registrosFiltrados">
+                <tr *ngIf="e.estado === 'RECHAZADO'">
+                  <td class="px-4">
+                    <div class="fw-bold text-primary">{{ e.contratista }}</div>
+                    <small class="text-muted">{{ e.dependencia }}</small>
+                  </td>
+                  <td><div class="text-truncate" style="max-width: 200px;">{{ e.objetoContrato }}</div></td>
+                  <td class="fw-bold">{{ e.valorEstimado | currency }}</td>
+                  <td>
+                    <span class="badge rounded-pill" [ngClass]="{
+                      'bg-warning text-dark': e.estado === 'PENDIENTE',
+                      'bg-info text-white': e.estado === 'ENVIADO',
+                      'bg-success': e.estado === 'APROBADO',
+                      'bg-danger': e.estado === 'RECHAZADO'
+                    }">{{ e.estado }}</span>
+                    
+                    <ng-container *ngIf="e.estado === 'RECHAZADO' ">
+                      <br>
+                      <span>Contratacion: {{ e.estadoContratacionRechazo }}.<br>Despacho: {{ e.estadoDireccionRechazo }}.<br>Presupuesto: {{ e.estadoPresupuestoRechazo }}</span>
+                    </ng-container>
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm">
+                      <button class="btn btn-outline-secondary" title="Necesidad del Servicio" (click)="generarWordNecesidad(e)" ><i class="bi bi-file-text"></i></button>
+                      <button class="btn btn-outline-secondary" title="Solicitud de Disponibilidad" (click)="generarWordSolicitud(e)" ><i class="bi bi-check2-square"></i></button>
+                      <button class="btn btn-outline-secondary" title="Constancia de Insuficiencia" (click)="generarWordInsuficiencia(e)" ><i class="bi bi-battery"></i></button>
+                      <button   class="btn btn-success" (click)="generarWordEstudio(e)"><i class="bi bi-download" ></i> <br>Estudio Previo</button>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                  
+                    <ng-container *ngIf="usuario$.rol=== 'Contratacion'">
+                      <button class="btn btn-sm btn-success me-1" (click)="cambiarEstadoContratacion(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoContratacion" ><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="usuario$.rol=== 'Direccion' && e.estado!='RECHAZADO' ">
+                      <button class="btn btn-sm btn-success me-1" (click)="cambiarEstadoDireccion(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoDireccion" ><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="usuario$.rol=== 'Presupuesto'">
+                      
+                      <button  class="btn btn-warning fw-bold" data-bs-toggle="modal" data-bs-target="#modalCDP" (click)="prepararCDP(e)">Registrar CDP</button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="alistarIdRechazo(e)" data-bs-toggle="modal" data-bs-target="#modalRechazoPresupuesto" ><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="e.estado === 'ENVIADO'">
+                      <button class="btn btn-sm btn-success me-1" (click)="cambiarEstado(e, 'APROBADO')"><i class="bi bi-check-lg"></i></button>
+                      <button class="btn btn-sm btn-danger me-1" (click)="cambiarEstado(e, 'RECHAZADO')"><i class="bi bi-x-lg"></i></button>
+                    </ng-container>
+                    <ng-container *ngIf="e.estado === 'RECHAZADO' ">
+
+                        <button class="btn btn-sm btn-light text-primary me-1" (click)="prepararEdicion(e)" data-bs-toggle="modal" data-bs-target="#modalEstudio"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-light text-danger" (click)="eliminar(e.id)"><i class="bi bi-trash"></i></button>
+                      
+                    </ng-container> 
+                  </td>
+                </tr>
+
+              </ng-container>
+              <tr *ngIf="registrosFiltrados.length === 0">
+                  <td colspan="6" class="text-center py-5 text-muted">No se encontraron registros de estudios previos.</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalEstudio" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-danger text-white p-4">
+        <h5 class="modal-title fw-bold">REGISTRAR ESTUDIO PREVIO</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4 bg-light">
+        <form class="row g-4">
+          
+          <div class="col-12"><h6 class="text-primary fw-bold border-bottom pb-2">1. INFORMACIÓN GENERAL</h6></div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">NOMBRE DEL CONTRATISTA</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevoEstudio.contratista" name="contratista">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">NOMBRE DEL DIRECTOR</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevoEstudio.nombreDirector" name="nombreDirector" >
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-bold">FECHA</label>
+            <input type="date" class="form-control" [(ngModel)]="nuevoEstudio.fechaAnalisis" name="fechaAnalisis">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-bold">PROGRAMA / AREA</label>
+            <select (change)="obtenerDatosPrograma()" class="form-select" [(ngModel)]="nuevoEstudio.dependencia" name="dependencia">
+              <option value="">Seleccionar</option>
+              <option *ngFor="let dep of nombresDependencias" [value]="dep">{{ dep }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">CODIGO PROYECTO</label>
+            <select class="form-select" [(ngModel)]="nuevoEstudio.codigoProyecto" name="codigoProyecto">
+               <option value="">Seleccionar</option>
+               <option value="2.3.2.02.02.009 Servicios para la comunidad, sociales y personales">2.3.2.02.02.009 Servicios para la comunidad, sociales y personales</option>
+               <option *ngIf="nuevoEstudio.dependencia==='CONTRATACION' || nuevoEstudio.dependencia==='RECURSOS HUMANOS' || nuevoEstudio.dependencia==='RECURSOS FISICOS' || nuevoEstudio.dependencia==='FINANCIERA' || nuevoEstudio.dependencia==='CONTABILIDAD' || nuevoEstudio.dependencia==='CENTRAL DE CUENTAS' || nuevoEstudio.dependencia==='TESORERIA' || nuevoEstudio.dependencia==='PRESUPUESTO' || nuevoEstudio.dependencia==='JURIDICA' || nuevoEstudio.dependencia==='CONTROL INTERNO'" value="2.1.2.02.02.009 Servicios para la comunidad, sociales y personales">2.1.2.02.02.009 Servicios para la comunidad, sociales y personales</option>
+            </select>
+          </div>
+          <div class="col-md-12">
+            <label class="form-label fw-bold">OBJETO CONTRACTUAL</label>
+            
+            <ng-select 
+                class="form-select"
+                [items]="datos_cargados_objetos_filtro" 
+                bindLabel="OBJETO_CONTRATACION" 
+                bindValue="OBJETO_CONTRATACION" 
+                placeholder="Escriba para buscar..."
+                [(ngModel)]="nuevoEstudio.objetoContrato"
+                name="objetoContratoSelect">
+                <ng-template ng-option-tmp let-item="item">
+                    <div style="white-space: normal; line-height: 1.2rem; padding: 5px 0;">
+                        {{ item.OBJETO_CONTRATACION }}
+                    </div>
+                </ng-template>
+
+                <ng-template ng-label-tmp let-item="item">
+                    <span style="white-space: normal;">{{ item.OBJETO_CONTRATACION }}</span>
+                </ng-template>
+            </ng-select>
+            <textarea class="form-control"  disabled rows="3" [(ngModel)]="nuevoEstudio.objetoContrato" name="objetoContrato"></textarea>
+          </div>
+          <div class="col-md-12">
+            <label class="form-label fw-bold">JUSTIFICACIÓN DEL AREA/DEPENDENCIA</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="nuevoEstudio.justificacion" name="justificacion"></textarea>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">NIVEL DE ESTUDIOS</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevoEstudio.nivelEstudios" name="nivelEstudios">
+          </div>
+          <div class="col-md-8">
+            <label class="form-label fw-bold">EXPERIENCIA (MESES)</label>
+            <select  class="form-select" [(ngModel)]="nuevoEstudio.experiencia" name="experiencia">
+              <option value="">Seleccionar</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+              <option value="18">18</option>
+              <option value="19">19</option>
+              <option value="20">20</option>
+              <option value="21">21</option>
+              <option value="22">22</option>
+              <option value="23">23</option>
+              <option value="24">24</option>
+            </select>
+          </div>
+          <div class="col-md-12">
+            <label class="form-label fw-bold">RECURSOS DE</label>
+            <select class="form-select" [(ngModel)]="nuevoEstudio.recursos" name="recursos">
+              <option value="">Seleccionar</option>
+              <option value="inversión">Inversión</option>
+              <option value="funcionamiento">Funcionamiento</option>
+            </select>
+          </div>
+
+          <div class="col-12 mt-4"><h6 class="text-primary fw-bold border-bottom pb-2">2. DATOS PRESUPUESTALES</h6></div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">PLAZO DEL CONTRATO (MESES)</label>
+            <input type="number" class="form-control" [(ngModel)]="nuevoEstudio.plazoContrato" name="plazoContrato">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">VALOR ESTIMADO DEL CONTRATO</label>
+            <input type="number" class="form-control border-primary" [(ngModel)]="nuevoEstudio.valorEstimado" name="valorEstimado">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">FUENTE FINANCIACIÓN</label>
+            <select class="form-select" (change)="obtenerDatosFuente()" [(ngModel)]="nuevoEstudio.fuenteFinanciacion" name="fuenteFinanciacion">
+              <option value="">Seleccionar</option>
+              <option *ngIf="nuevoEstudio.fuenteFinanciacion" [value]="nuevoEstudio.fuenteFinanciacion">{{nuevoEstudio.fuenteFinanciacion}}</option>
+            <option *ngFor="let dep of datosPrograma" [value]="dep.Fuente">{{ dep.Fuente }}</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">ATRIBUTO</label>
+            <select class="form-select" (change)="obtenerDatosAtributo()" [(ngModel)]="nuevoEstudio.atributo" name="atributo">
+              <option value="">Seleccionar</option>
+              <option *ngIf="nuevoEstudio.atributo" [value]="nuevoEstudio.atributo">{{nuevoEstudio.atributo}}</option>
+              <option *ngFor="let dep of datosFuentes" [value]="dep.Atributo">{{ dep.Atributo }}</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">PRODUCTO</label>
+            <select class="form-select" (change)="obtenerDatosProducto()"  [(ngModel)]="nuevoEstudio.producto" name="producto">
+              <option value="">Seleccionar</option>
+              <option *ngIf="nuevoEstudio.producto" [value]="nuevoEstudio.producto">{{nuevoEstudio.producto}}</option>
+              <option *ngFor="let dep of datosAtributos" [value]="dep.Producto">{{ dep.Producto }}</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">CÓDIGO BPIN</label>
+            <select class="form-select" (change)="obtenerDatosBPIN()"  [(ngModel)]="nuevoEstudio.codigoBPIN" name="codigoBPIN">
+              <option value="">Seleccionar</option>
+              <option *ngIf="nuevoEstudio.codigoBPIN" [value]="nuevoEstudio.codigoBPIN">{{nuevoEstudio.codigoBPIN}}</option>
+                <option *ngFor="let dep of datosProductos" [value]="dep.BPIN">{{ dep.BPIN }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">RUBRO PRESUPUESTAL</label>
+            <select class="form-select" [(ngModel)]="nuevoEstudio.rubroPresupuestal" name="rubroPresupuestal">
+               <option value="">Seleccionar</option>
+              <option *ngIf="nuevoEstudio.rubroPresupuestal" [value]="nuevoEstudio.rubroPresupuestal">{{nuevoEstudio.rubroPresupuestal}}</option>
+                <option *ngFor="let dep of datosBPIN" [value]="dep.Rubro">{{ dep.Rubro }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">CÓDIGO DANE</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevoEstudio.codigoDANE" name="codigoDANE">
+          </div>
+          <div class="col-md-4">
+            
+              <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" id="otraFuenteFinanciacioncheck"   [(ngModel)]="nuevoEstudio.otraFuenteFinanciacion" name="otraFuenteFinanciacion">
+                <label class="form-check-label small fw-bold" for="otraFuenteFinanciacioncheck">¿Cuenta con otra fuente de financianciación?</label>
+              </div>
+          </div>
+          <div class="col-md-4" *ngIf="nuevoEstudio.otraFuenteFinanciacion === true">
+            <label class="form-label fw-bold">FUENTE FINANCIACIÓN</label>
+            <select class="form-select" (change)="obtenerDatosFuente2()" [(ngModel)]="nuevoEstudio.fuenteFinanciacion2" name="fuenteFinanciacion2">
+              <option value="">Seleccionar</option>
+              <option *ngIf="nuevoEstudio.fuenteFinanciacion2" [value]="nuevoEstudio.fuenteFinanciacion2">{{nuevoEstudio.fuenteFinanciacion2}}</option>
+            <option *ngFor="let dep of datosPrograma" [value]="dep.Fuente">{{ dep.Fuente }}</option>
+            </select>
+          </div>
+          <div class="col-md-4" *ngIf="nuevoEstudio.otraFuenteFinanciacion === true">
+            <label class="form-label fw-bold">ATRIBUTO</label>
+            <select class="form-select"   [(ngModel)]="nuevoEstudio.atributo2" name="atributo2">
+              <option value="">Seleccionar</option>
+              <option *ngIf="nuevoEstudio.atributo2" [value]="nuevoEstudio.atributo2">{{nuevoEstudio.atributo2}}</option>
+              <option *ngFor="let dep of datosFuentes2" [value]="dep.Atributo">{{ dep.Atributo }}</option>
+            </select>
+          </div>
+
+          <div class="col-12 mt-4"><h6 class="text-primary fw-bold border-bottom pb-2">3. EJECUCIÓN</h6></div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">ZONA DEL LUGAR DE EJECUCIÓN</label>
+            <select class="form-select" [(ngModel)]="nuevoEstudio.lugarEjecucionZona" name="lugarEjecucionZona">
+              <option value="">Seleccionar</option>
+              <option value="URBANA">URBANA</option>
+              <option value="RURAL">RURAL</option>
+              <option value="URBANA Y/O RURAL">URBANA Y/O RURAL</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">MUNICIPIOS DEL LUGAR DE EJECUCIÓN</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevoEstudio.lugarEjecucionMunicipios" name="lugarEjecucionMunicipios">
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-bold">OBLIGACIONES ESPECÍFICAS</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="nuevoEstudio.obligaciones" name="obligaciones"></textarea>
+          </div>
+
+          <div class="col-12 mt-4"><h6 class="text-primary fw-bold border-bottom pb-2">4. SUPERVISIÓN</h6></div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">ESTARÁ A CARGO DEL</label>
+            <select class="form-select" [(ngModel)]="nuevoEstudio.aCargoDel" name="aCargoDel">
+              <option value="">Seleccionar</option>
+              <option value="COORDINADOR">COORDINADOR</option>
+              <option value="RESPONSABLE">RESPONSABLE</option>
+              <option value="Profesional Universitario área de la salud - Enfermero  Regional  Ocaña">Profesional Universitario área de la salud - Enfermero  Regional  Ocaña</option>
+              <option value="Profesional Universitario área de la salud - Enfermero  Regional  Pamplona">Profesional Universitario área de la salud - Enfermero  Regional  Pamplona</option>
+              <option value="Profesional Universitario área de la salud - Enfermero  Regional  Suroriental">Profesional Universitario área de la salud - Enfermero  Regional  Suroriental</option>
+              <option value="Profesional Universitario área de la salud - Enfermero  Regional  Norte">Profesional Universitario área de la salud - Enfermero  Regional  Norte</option>
+              <option value="Profesional Universitario área de la salud - Responsable de Sanidad Portuaria">Profesional Universitario área de la salud - Responsable de Sanidad Portuaria</option>
+              <option value="Profesional Universitario área de la salud - Enfermero Regional metropolitana">Profesional Universitario área de la salud - Enfermero Regional metropolitana</option>
+              <option value="Profesional especializado - Enfermero  Regional  Centro">Profesional especializado - Enfermero  Regional  Centro</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Nombre del area o porgama</label>
+            <select class="form-select shadow-sm"  [(ngModel)]="nuevoEstudio.aCargoDelAreaP" name="aCargoDelAreaP" (change)="cambioDependenciaResp()">
+              <option value="">Seleccionar</option>
+              <option value="COMPONENTE DE SANIDAD PORTUARIA">COMPONENTE DE SANIDAD PORTUARIA</option>
+              <option value="COMPONENTE DE OBSERVATORIO DE SALUD PUBLICA">COMPONENTE DE OBSERVATORIO DE SALUD PUBLICA</option>
+              <option *ngFor="let dep of nombresDependencias" [value]="dep">{{ dep }}</option>
+            </select>
+
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 bg-white rounded border shadow-sm h-100">
+              <label class="form-label fw-bold text-primary small">RESPONSABLE:</label>
+              <input type="text" class="form-control mb-2" [(ngModel)]="nuevoEstudio.nombreResponsable" name="nombreResponsable" placeholder="Nombre">
+              <input type="text" class="form-control mb-2" [(ngModel)]="nuevoEstudio.cargoResponsable" name="cargoResponsable" placeholder="Cargo">
+              
+              <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" id="checkCoor" (change)="onCheckCoordinadorChange()" [(ngModel)]="nuevoEstudio.responsableMismoCoordinador" name="responsableMismoCoordinador">
+                <label class="form-check-label small fw-bold" for="checkCoor">¿Responsable es el mismo coordinador?</label>
+              </div>
+              <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" id="responsableEncargadocheck"   [(ngModel)]="nuevoEstudio.responsableEncargado" name="responsableEncargado">
+                <label class="form-check-label small fw-bold" for="responsableEncargadocheck">Encargado</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6" *ngIf="!nuevoEstudio.responsableMismoCoordinador">
+            <div class="p-3 bg-white rounded border shadow-sm h-100">
+              <label class="form-label fw-bold text-primary small">RESPONSABLE COORDINADOR:</label>
+              <input type="text" class="form-control mb-2" [(ngModel)]="nuevoEstudio.nombreResponsableCoor" name="nombreResponsableCoor" placeholder="Nombre">
+              <input type="text" class="form-control mb-2" [(ngModel)]="nuevoEstudio.cargoResponsableCoor" name="cargoResponsableCoor" placeholder="Cargo">
+              <input type="text" class="form-control"  [(ngModel)]="nuevoEstudio.dependenciaCoor" name="dependenciaCoor" placeholder="Dependencia">
+            </div>
+          </div>
+
+          <div class="col-12 mt-4"><h6 class="text-primary fw-bold border-bottom pb-2">5. PROYECCIÓN</h6></div>
+         <div class="col-md-4">
+            <div class="p-3 bg-white rounded border shadow-sm h-100">
+              <label class="form-label fw-bold text-primary small">PROYECTADO POR:</label>
+              <input type="text" class="form-control mb-2" [(ngModel)]="nuevoEstudio.nombreProyecto" name="nombreProyecto" placeholder="Nombre">
+              <select class="form-select mb-2" [(ngModel)]="nuevoEstudio.cargoProyecto" name="cargoProyecto" placeholder="Cargo">
+                  <option value="">Seleccionar</option>
+                  <option value="Profesional Universitario">Profesional Universitario</option>
+                  <option value="Profesional Especializado">Profesional Especializado</option>
+              </select>
+              <label class="small fw-bold">FECHA PROYECCIÓN</label>
+              <input type="date" class="form-control" [(ngModel)]="nuevoEstudio.fechaProyecto" name="fechaProyecto">
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="p-3 bg-white rounded border shadow-sm h-100">
+              <label class="form-label fw-bold text-success small">APROBADO POR:</label>
+              <input type="text" class="form-control mb-2" [(ngModel)]="nuevoEstudio.nombreAprobo" name="nombreAprobo" placeholder="Nombre">
+              <select  class="form-select mb-2" [(ngModel)]="nuevoEstudio.cargoAprobo" name="cargoAprobo" placeholder="Cargo"> 
+                <option value="">Seleccionar</option>
+                <option value="Profesional Universitario">Profesional Universitario</option>
+                <option value="Profesional Especializado">Profesional Especializado</option>
+              </select>
+              <label class="small fw-bold">FECHA APROBACIÓN</label>
+              <input type="date" class="form-control" [(ngModel)]="nuevoEstudio.fechaAprobacion" name="fechaAprobacion">
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div class="p-4 bg-primary text-white rounded shadow h-100 d-flex flex-column justify-content-center align-items-center">
+              <label class="small fw-bold">FECHA FIRMA SISTEMA  </label>
+              <h2 class="fw-bold my-2">{{ nuevoEstudio.fechaAnalisis | date:'dd/MM/yyyy' }}</h2>
+              <i class="bi bi-clock-history fs-3 opacity-50"></i>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer bg-white">
+        <button class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+        <button [disabled]="submitbtn" class="btn btn-primary rounded-pill px-4 shadow" (click)="guardar()">Guardar Registro</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalCDP" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">REGISTRAR CDP</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NÚMERO CDP</label>
+          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
+        </div>
+        <div>
+          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
+          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary w-100 rounded-pill" (click)="guardarCDP()">Actualizar CDP</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalRechazoDireccion" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">REGISTRAR RECHAZO DIRECCIÓN</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">MOTIVO RECHAZO DIRECCIÓN</label>
+          <input type="text" class="form-control" [(ngModel)]="rechazoDireccion" placeholder="Ej: No cumple con requisitos">
+        </div> 
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary w-100 rounded-pill" (click)="cambiarEstadoDireccion(idRechazo, 'RECHAZADO')">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalRechazoContratacion" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">REGISTRAR RECHAZO CONTRATACIÓN</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">MOTIVO RECHAZO CONTRATACIÓN</label>
+          <input type="text" class="form-control" [(ngModel)]="rechazoContratacion" placeholder="Ej: No cumple con requisitos">
+        </div> 
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary w-100 rounded-pill" (click)="cambiarEstadoContratacion(idRechazo, 'RECHAZADO')">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalRechazoPresupuesto" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">REGISTRAR RECHAZO PRESUPUESTO</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">MOTIVO RECHAZO PRESUPUESTO</label>
+          <input type="text" class="form-control" [(ngModel)]="rechazoPresupuesto" placeholder="Ej: No cumple con requisitos">
+        </div> 
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary w-100 rounded-pill" (click)="cambiarEstadoPresupuesto(idRechazo, 'RECHAZADO')">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>

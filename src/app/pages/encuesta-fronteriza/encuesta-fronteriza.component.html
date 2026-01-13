@@ -1,0 +1,196 @@
+<div class="container-fluid py-4">
+  <div class="banner-container">
+    <div class="banner-left">
+      <i class="bi bi-geo-alt-fill"></i>
+    </div>
+    <div class="banner-right">
+      <p class="h3 fw-bold">Encuesta Fronteriza</p>
+      <p class="text-muted">IDS Norte de Santander</p>
+    </div>
+  </div>
+
+    <div class="d-flex justify-content-end mb-4 px-4">
+      <button  *ngIf="usuario$?.rol === 'Administrador'" class="btn btn-outline-danger px-4 rounded-pill shadow" 
+            data-bs-toggle="modal" data-bs-target="#modalResumen" (click)="generarResumenMunicipios()">
+        <i class="bi bi-bar-chart-line me-2"></i>Ver cantidad registros diarios
+      </button> &nbsp;
+        <button class="btn btn-danger px-4 rounded-pill shadow" 
+                data-bs-toggle="modal" data-bs-target="#modalEncuesta" (click)="cancelarEdicion()">
+            <i class="bi bi-plus-lg me-2"></i>Realizar Nueva Encuesta
+        </button>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mx-4">
+    <table class="table mb-0">
+        <thead class="custom-thead">
+        <tr>
+            <th>Municipio</th>
+            <th>Estado</th>
+            <th>Fecha y Hora</th>
+            <th>Reporta</th>
+            <th class="text-center" *ngIf="usuario$?.rol === 'Administrador'">Acciones</th>
+        </tr>
+        </thead>
+        <tbody class="custom-tbody">
+        <tr *ngFor="let r of registros">
+            <td class="fw-bold">{{ r.municipio }}</td>
+            <td>
+            <span class="badge" [ngClass]="{
+                'bg-success-subtle text-success': r.estadoPasos === 'HABILITADO',
+                'bg-danger-subtle text-danger': r.estadoPasos === 'CERRADO',
+                'bg-warning-subtle text-warning': r.estadoPasos === 'RESTRINGIDO'
+            }">{{ r.estadoPasos }}</span>
+            </td>
+            <td>{{ r.fechaHora | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ r.reporta }}</td>
+            <td class="text-center" *ngIf="usuario$?.rol === 'Administrador'">
+                <button class="btn btn-sm btn-light text-primary me-2" 
+                        (click)="prepararEdicion(r)" data-bs-toggle="modal" data-bs-target="#modalEncuesta">
+                    <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-light text-danger" (click)="eliminar(r.id)">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        </tr>
+        <tr *ngIf="registros.length === 0">
+            <td colspan="5" class="text-center py-5 text-muted">No se encontraron registros de encuesta fronteriza.</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEncuesta" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-danger text-white border-0">
+        <h5 class="modal-title fw-bold">NUEVO REPORTE FRONTERIZO</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold small">MUNICIPIO</label>
+            <select class="form-select bg-light-input" [(ngModel)]="nuevaEncuesta.municipio" name="muni">
+                <ng-container *ngIf="usuario$?.rol === 'Administrador'">
+                    <option *ngFor="let m of municipios" [value]="m">{{m}}</option>
+                </ng-container>
+                <ng-container *ngIf="usuario$?.rol === 'Usuario Departamental'">
+                    <option *ngFor="let m of municipios" [value]="m">{{m}}</option>
+                </ng-container>
+                <ng-container *ngIf="usuario$?.rol === 'Usuario Municipal'">
+                    <ng-container *ngFor="let m of municipios" >
+                        <option [value]="m" *ngIf="usuario$?.mnpo === m">{{m}}</option>
+                    </ng-container> 
+                </ng-container> 
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-bold small">FRONTERA</label>
+            <select class="form-select bg-light-input" [(ngModel)]="nuevaEncuesta.frontera" name="front">
+              <option>Fronterizo</option>
+              <option>No fronterizo</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-bold small">¿PUENTE?</label>
+            <select class="form-select bg-light-input" [(ngModel)]="nuevaEncuesta.puenteFronterizo" name="psn">
+              <option>SI</option>
+              <option>NO</option>
+            </select>
+          </div>
+
+          <div class="col-md-12" *ngIf="nuevaEncuesta.puenteFronterizo === 'SI'">
+            <label class="form-label fw-bold small">PUENTE INTERNACIONAL</label>
+            <select class="form-select bg-light-input" [(ngModel)]="nuevaEncuesta.puenteInternacional" name="pnom">
+              <option *ngFor="let p of puentesInternacionales" [value]="p">{{p}}</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-bold small">ESTADO DEL PASO</label>
+            <select class="form-select bg-light-input" [(ngModel)]="nuevaEncuesta.estadoPasos" name="est">
+              <option *ngFor="let e of estadosPasos" [value]="e">{{e}}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold small">¿NOVEDAD?</label>
+            <select class="form-select bg-light-input" [(ngModel)]="nuevaEncuesta.novedadFrontera" name="nov">
+              <option>SI</option>
+              <option>NO</option>
+            </select>
+          </div>
+
+          <div class="col-md-12" *ngIf="nuevaEncuesta.novedadFrontera === 'SI'">
+            <label class="form-label fw-bold small">¿CUÁL ES LA NOVEDAD?</label>
+            <input type="text" class="form-control bg-light-input" [(ngModel)]="nuevaEncuesta.cualNovedad" name="cn">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-bold small">LUGAR</label>
+            <input type="text" class="form-control bg-light-input" [(ngModel)]="nuevaEncuesta.lugar" name="lug">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold small">FECHA Y HORA</label>
+            <input type="datetime-local" class="form-control bg-light-input" [(ngModel)]="nuevaEncuesta.fechaHora" name="fh">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold small">ALOJAMIENTO TEMPORAL</label>
+            <select class="form-select bg-light-input" [(ngModel)]="nuevaEncuesta.alojamientoTemporal" name="aloj">
+              <option>SI</option>
+              <option>NO</option>
+            </select>
+          </div>
+          <div class="col-md-8" *ngIf="nuevaEncuesta.alojamientoTemporal === 'SI'">
+            <label class="form-label fw-bold small">NÚMERO DE PERSONAS</label>
+            <input type="number" class="form-control bg-light-input" [(ngModel)]="nuevaEncuesta.numPersonas" name="np">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-bold small">NOMBRES Y APELLIDOS (QUIEN REPORTA)</label>
+            <input type="text" class="form-control bg-light-input" [(ngModel)]="nuevaEncuesta.reporta" name="rep">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-danger rounded-pill px-4" (click)="guardarRegistro()" data-bs-dismiss="modal">Guardar Reporte</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalResumen" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-dark text-white border-0">
+        <h5 class="modal-title fw-bold">REGISTROS POR MUNICIPIO</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-0">
+        <table class="table table-hover mb-0">
+          <thead class="table-light  text-white">
+            <tr>
+              <th class="ps-4">Municipio</th>
+              <th class="text-center">Cant. Registros</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of resumenMunicipios" [class.table-success]="item.total >= 2" [class.table-warning]="item.total === 1" [class.table-danger]="item.total === 0">
+              <td class="ps-4 fw-medium">{{ item.nombre }}</td>
+              <td class="text-center">
+                <span class="badge" [ngClass]="item.total >= 2 ? 'bg-success' : item.total === 1 ? 'bg-warning text-muted': 'bg-danger'">
+                  {{ item.total }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

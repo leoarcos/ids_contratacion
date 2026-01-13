@@ -1,0 +1,53 @@
+/* Contenedor general */
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Escondido inicialmente */
+  width: 250px;
+  height: 100%;
+  background-color: #d70528;
+  transition: left 0.3s ease-in-out;
+  z-index: 1050;
+}
+
+/* Cuando está abierto */
+.sidebar-container.open {
+  left: 0;
+}
+
+/* Sidebar interno */
+.sidebar {
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Botón hamburguesa fijo */
+.toggle-btn {   
+  top: 0;
+  left: 0;
+  width: 100%; /* ocupa todo el ancho */
+  z-index: 1050; /* encima de sidebar */
+  border-radius: 0; /* estilo barra */ 
+
+}
+
+/* Contenido principal con margen si sidebar está abierto en escritorio */
+@media (min-width: 768px) {
+  .sidebar-container {
+    left: 0;
+  }
+
+  .content {
+    margin-left: 250px;
+  }
+
+  .toggle-btn {
+    display: none;
+  }
+}
+
+/* Estilo del enlace activo */
+.nav-link.active {
+  background-color: #0d6efd;
+  border-radius: 5px;
+}

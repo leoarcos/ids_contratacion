@@ -1,0 +1,66 @@
+/* Títulos */
+h4, h3 { margin: 0; }
+
+/* Banner Institucional con inclinación */
+.banner-container {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  position: relative;
+  max-width: fit-content;
+  margin-bottom: 2rem;
+}
+
+.banner-left {
+  background: #a50000;
+  color: white;
+  padding: 15px 25px;
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: skew(-21deg);
+  z-index: 2;
+}
+
+.banner-left i { transform: skew(21deg); }
+
+.banner-right {
+  background: white;
+  color: black;
+  padding: 10px 40px;
+  margin-left: -15px;
+  border-left: 8px solid #d70528;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transform: skew(-21deg);
+  z-index: 1;
+}
+
+.banner-right p {
+  margin: 0;
+  transform: skew(21deg);
+}
+
+/* Tabla Minimalista personalizada */
+.custom-thead th {
+  border: none !important;
+  background-color: #ee433a;
+  color: white;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  padding: 15px;
+}
+
+.custom-tbody td {
+  border: none !important;
+  padding: 15px;
+  vertical-align: middle;
+}
+
+.custom-tbody tr:hover {
+  background-color: #fcfcfc;
+}
+
+/* Modal y Formulario */
+.modal-content { border-radius: 12px; }
+.bg-light-input { background-color: #f4f6f9; border: none; }

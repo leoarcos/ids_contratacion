@@ -1,0 +1,84 @@
+/* Contenedor principal */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #f8f9fa; /* fondo neutro */
+}
+
+/* Tarjeta del login */
+.login-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+/* Logo */
+.logo img {
+  width: 100px;
+  margin-bottom: 1rem;
+}
+
+/* Título */
+.title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #006633; /* Verde institucional */
+  margin-bottom: 1.5rem;
+}
+
+/* Inputs */
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  outline: none;
+  font-size: 0.95rem;
+  transition: 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #c8102e; /* Rojo institucional */
+  box-shadow: 0 0 5px rgba(200,16,46,0.3);
+}
+
+/* Botón */
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(90deg, #e9c7c7, #d70528);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-login:hover {
+  opacity: 0.9;
+  background:  #d70528;
+}
+
+/* Enlace recuperar */
+.forgot {
+  margin-top: 1rem; 
+  cursor:pointer;
+}
+
+.forgot a {
+  font-size: 0.9rem;
+  color: #006633;
+  text-decoration: none;
+}
+
+.forgot a:hover {
+  text-decoration: underline;
+}
