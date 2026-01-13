@@ -26,6 +26,18 @@ export class EstudiosPreviosService {
     // Retornamos los datos de la consulta 'q' en lugar de la referencia completa
     return collectionData(q, { idField: 'id' }) as Observable<any[]>;
   }
+  getEstudiosAprobados(): Observable<any[]> {
+    const ref = collection(this.firestore, this.collectionName);
+    
+    // Creamos la consulta con las dos condiciones
+    const q = query(
+      ref,  
+      where('estado', '==', 'APROBADO')
+    );
+
+    // Retornamos los datos de la consulta 'q' en lugar de la referencia completa
+    return collectionData(q, { idField: 'id' }) as Observable<any[]>;
+  }
 
   async addEstudio(estudio: any) {
     try {

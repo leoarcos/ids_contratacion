@@ -1,0 +1,151 @@
+
+<div class="container-fluid py-4 bg-light min-vh-100">
+  <div class="banner-container mb-4 shadow-sm">
+    <div class="banner-left bg-danger text-white p-4">
+      <i class="bi bi-file-earmark-medical fs-1"></i>
+    </div>
+    <div class="banner-right border-start border-primary border-4 bg-white p-4">
+      <h2 class="fw-bold text-dark mb-0">ESTUDIOS PREVIOS</h2>
+      <p class="text-muted mb-0">Gestión de Análisis de Conveniencia y Oportunidad</p>
+    </div>
+  </div>
+
+  <div class="px-4">
+    <ul class="nav nav-tabs mb-3 border-0">
+      <li class="nav-item">
+        <button class="nav-link rounded-pill me-2 px-4 shadow-sm" 
+                [class.active]="pestanaActiva === 'TODOS'" 
+                (click)="cambiarPestana('TODOS')">
+          <i class="bi bi-clock-history me-2"></i>
+          <ng-container *ngIf="usuario$?.rol === 'Supervisor'">Todos</ng-container>
+          <ng-container *ngIf="usuario$?.rol !== 'Supervisor'">Pendientes</ng-container>
+        </button>
+      </li>
+      <li class="nav-item" *ngIf="usuario$?.rol === 'Supervisor'">
+        <button class="nav-link rounded-pill me-2 px-4 shadow-sm text-warning" 
+                [class.active]="pestanaActiva === 'PENDIENTES'" 
+                (click)="cambiarPestana('PENDIENTES')">
+          <i class="bi bi-clock-history me-2"></i>Pendientes
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link rounded-pill me-2 px-4 shadow-sm text-success" 
+                [class.active]="pestanaActiva === 'APROBADOS'" 
+                (click)="cambiarPestana('APROBADOS')">
+          <i class="bi bi-check-circle me-2"></i>Aprobados
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link rounded-pill me-2 px-4 shadow-sm text-danger" 
+                [class.active]="pestanaActiva === 'RECHAZADOS'" 
+                (click)="cambiarPestana('RECHAZADOS')">
+          <i class="bi bi-x-octagon me-2"></i>Rechazados
+        </button>
+      </li>
+    </ul> 
+
+    <div class="input-group style-search">
+      <span class="input-group-text bg-white border-end-0 rounded-start-pill ps-3">
+        <i class="bi bi-search text-muted"></i>
+      </span>
+      <input type="text" 
+            class="form-control border-start-0 rounded-end-pill py-2" 
+            placeholder="Buscar contratista, dependencia u objeto..." 
+            [(ngModel)]="filtroBusqueda" 
+            (input)="ejecutarBusqueda()">
+    </div>
+    <div *ngIf="pestanaActiva==='TODOS'" class="card border-0 shadow-sm rounded-4 overflow-hidden">
+       <h5 class="text-secondary fw-bold"><i class="bi bi-list-ul me-2"></i>
+
+        Registros&nbsp;
+       
+        <strong>({{ registrosFiltrados.length }})</strong>
+         
+      </h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-primary text-white">
+            <tr>
+              <th class="py-3 px-4">Contratista / Dependencia</th>
+              <th>Objeto</th>
+              <th>Valor Estimado</th>
+              <th>Estado</th>
+              <th class="text-center">Trámites</th>
+              <th class="text-center">Gestión</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let e of registrosFiltrados">
+              <td class="px-4">
+                <div class="fw-bold text-primary">{{ e.contratista }}</div>
+                <small class="text-muted">{{ e.dependencia }}</small>
+              </td>
+              <td><div class="text-truncate" style="max-width: 200px;">{{ e.objetoContrato }}</div></td>
+              <td class="fw-bold">{{ e.valorEstimado | currency }}</td>
+              <td>
+                <span class="badge rounded-pill" [ngClass]="{
+                  'bg-warning text-dark': e.estado === 'PENDIENTE',
+                  'bg-info text-white': e.estado === 'ENVIADO',
+                  'bg-success': e.estado === 'APROBADO',
+                  'bg-danger': e.estado === 'RECHAZADO'
+                }">{{ e.estado }}</span>
+                
+                <ng-container *ngIf="e.estado === 'RECHAZADO' ">
+                  <br>
+                  <span>Contratacion: {{ e.estadoContratacionRechazo }}.<br>Despacho: {{ e.estadoDireccionRechazo }}.<br>Presupuesto: {{ e.estadoPresupuestoRechazo }}</span>
+                </ng-container>
+              </td>
+              <td class="text-center">
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-outline-secondary" title="Necesidad del Servicio" (click)="generarWordNecesidad(e)" ><i class="bi bi-file-text"></i></button>
+                  <button class="btn btn-outline-secondary" title="Solicitud de Disponibilidad" (click)="generarWordSolicitud(e)" ><i class="bi bi-check2-square"></i></button>
+                  <button class="btn btn-outline-secondary" title="Constancia de Insuficiencia" (click)="generarWordInsuficiencia(e)" ><i class="bi bi-battery"></i></button>
+                  <button   class="btn btn-success" (click)="generarWordEstudio(e)"><i class="bi bi-download" ></i> <br>Estudio Previo</button>
+                </div>
+              </td>
+              <td class="text-center">
+               
+              </td>
+            </tr>
+            <tr *ngIf="registrosFiltrados.length === 0">
+                <td colspan="6" class="text-center py-5 text-muted">No se encontraron registros de estudios previos.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div *ngIf="pestanaActiva==='PENDIENTES'  " class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        
+    </div>
+    <div *ngIf="pestanaActiva==='APROBADOS'  " class="card border-0 shadow-sm rounded-4 overflow-hidden">
+      
+    </div>
+    <div *ngIf="pestanaActiva==='RECHAZADOS'  " class="card border-0 shadow-sm rounded-4 overflow-hidden">
+       
+    </div>
+  </div>
+</div>
+ 
+<div class="modal fade" id="modalCDP" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">REGISTRAR CDP</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NÚMERO CDP</label>
+          <input type="text" class="form-control" [(ngModel)]="datosCDP.cdpNumero" placeholder="Ej: 100234">
+        </div>
+        <div>
+          <label class="form-label fw-bold">FECHA EXPEDICIÓN CDP</label>
+          <input type="date" class="form-control" [(ngModel)]="datosCDP.cdpFecha">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+      </div>
+    </div>
+  </div>
+</div> 

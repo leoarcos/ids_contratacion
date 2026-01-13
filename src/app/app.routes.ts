@@ -8,6 +8,7 @@ import { SivigilaEventosComponent } from './pages/sivigila-eventos/sivigila-even
 import { EncuestaFronterizaComponent } from './pages/encuesta-fronteriza/encuesta-fronteriza.component';
 import { AlertaAmarillaComponent } from './pages/alerta-amarilla/alerta-amarilla.component';
 import { EstudiosPreviosComponent } from './pages/estudios-previos/estudios-previos.component';
+import { EstructuradoresComponent } from './pages/estructuradores/estructuradores.component';
 
 export const routes: Routes = [
   { path: '', component: LogInComponent }, // ruta por defecto
@@ -20,6 +21,7 @@ export const routes: Routes = [
       { path: 'encuesta', component: EncuestaFronterizaComponent }, 
       { path: 'amarilla', component: AlertaAmarillaComponent }, 
       { path: 'estudios-previos', component: EstudiosPreviosComponent }, 
+      { path: 'estructuradores', component: EstructuradoresComponent }, 
       //{ path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
