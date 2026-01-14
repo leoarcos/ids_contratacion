@@ -17,7 +17,17 @@ export class ModalInvitacionComponent {
      
     
     this.registro = this.fb.group({ 
-      variable: ['', Validators.required] 
+      FechaInvitacion: ['', Validators.required], 
+      NombreInvitacion: ['', Validators.required],
+      CCInvitacion: ['', Validators.required],
+      CC_CiudadInvitacion: ['', Validators.required],
+      DireccionInvitacion: ['', Validators.required], 
+      CorreoInvitacion: ['', Validators.required], 
+      TelefonoInvitacion: ['', Validators.required], 
+      NumeroProcesoInvitacion: ['', Validators.required], 
+      RequisiosInvitacion: ['', Validators.required], 
+      ElaboroInvitacion: ['', Validators.required], 
+      RevisoInvitacion: ['', Validators.required] 
     });
   }
   

@@ -3,13 +3,13 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-modal-propuesta',
+  selector: 'app-modal-idoneidad-exp',
   standalone: true,
   imports: [FormsModule, CommonModule, ReactiveFormsModule, FormsModule],
-  templateUrl: './modal-propuesta.component.html',
-  styleUrl: './modal-propuesta.component.css'
+  templateUrl: './modal-idoneidad-exp.component.html',
+  styleUrl: './modal-idoneidad-exp.component.css'
 })
-export class ModalPropuestaComponent {
+export class ModalIdoneidadExpComponent {
 
   registro!: FormGroup;
   constructor(private fb: FormBuilder) { }
@@ -17,8 +17,8 @@ export class ModalPropuestaComponent {
      
     
     this.registro = this.fb.group({ 
-      FechaPropuesta: ['', Validators.required],
-      RequisitosPropuesta: ['', Validators.required] 
+      FechaConcepto: ['', Validators.required],
+      NITConcepto: ['', Validators.required]
     });
   }
   

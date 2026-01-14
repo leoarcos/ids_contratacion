@@ -112,6 +112,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalInvitacion" >INVITACION</a></li>
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalPropuestaContrato" >PROPUESTA DE CONTRATO</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalIdoneidadExp" >ESTUDIO DE IDONEIDAD Y EXPERIENCIA</a></li>
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalClausulado" >CLAUSULADO</a></li>
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalConceptoJuridico" >CONCEPTO JURIDICO</a></li>
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalCRP" >CRP</a></li>
@@ -143,19 +144,18 @@
  
 <div class="modal fade" id="modalInvitacion" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow">
-      <div class="modal-header bg-warning">
-        <h5 class="modal-title fw-bold">REGISTRAR INVITACION</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-warning">
+          <h5 class="modal-title fw-bold">REGISTRAR INVITACION</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <app-modal-invitacion></app-modal-invitacion>
+        </div>    
+        <div class="modal-footer">
+          <button class="btn btn-primary w-100 rounded-pill"  >FINALIZAR REGISTRO</button>
+        </div>
       </div>
-      <div class="modal-body p-4">
-        <app-modal-invitacion></app-modal-invitacion>
-        
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
-      </div>
-    </div>
   </div>
 </div> 
 <div class="modal fade" id="modalPropuestaContrato" tabindex="-1">
@@ -169,8 +169,24 @@
         <app-modal-propuesta></app-modal-propuesta>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+        <button class="btn btn-primary w-100 rounded-pill"  >FINALIZAR REGISTRO</button>
       </div>
+    </div>
+  </div>
+</div> 
+<div class="modal fade" id="modalIdoneidadExp" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">REGISTRAR ESTUDIO DE IDONEIDAD Y EXPERIENCIA</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+        <div class="modal-body p-4">
+          <app-modal-idoneidad-exp></app-modal-idoneidad-exp>
+        </div>  
+        <div class="modal-footer">
+          <button class="btn btn-primary w-100 rounded-pill"  >FINALIZAR REGISTRO</button>
+        </div>
     </div>
   </div>
 </div> 
@@ -185,7 +201,7 @@
         <app-modal-concepto-jueridico></app-modal-concepto-jueridico>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+        <button class="btn btn-primary w-100 rounded-pill"  >FINALIZAR REGISTRO</button>
       </div>
     </div>
   </div>
@@ -201,7 +217,7 @@
         <app-modal-crp></app-modal-crp>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+        <button class="btn btn-primary w-100 rounded-pill"  >FINALIZAR REGISTRO</button>
       </div>
     </div>
   </div>
@@ -217,7 +233,7 @@
         <app-modal-acta-aprobacion></app-modal-acta-aprobacion>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+        <button class="btn btn-primary w-100 rounded-pill"  >FINALIZAR REGISTRO</button>
       </div>
     </div>
   </div>
@@ -233,7 +249,7 @@
         <app-modal-acta-inicio></app-modal-acta-inicio>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+        <button class="btn btn-primary w-100 rounded-pill"  >FINALIZAR REGISTRO</button>
       </div>
     </div>
   </div>
@@ -249,7 +265,7 @@
         <app-modal-designacion></app-modal-designacion>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+        <button class="btn btn-primary w-100 rounded-pill"  >FINALIZAR REGISTRO</button>
       </div>
     </div>
   </div>
@@ -265,7 +281,7 @@
         <app-modal-clausulado></app-modal-clausulado>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary w-100 rounded-pill"  >Actualizar CDP</button>
+        <button class="btn btn-primary w-100 rounded-pill"  >FINALIZAR REGISTRO</button>
       </div>
     </div>
   </div>

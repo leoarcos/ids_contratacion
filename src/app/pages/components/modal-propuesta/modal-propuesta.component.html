@@ -2,10 +2,23 @@
     <div class="row">
         <div class="col-md-12">
             <div class="mb-3">
-            <label class="form-label fw-bold">NÚMERO CssDP</label>
-            <input type="text" class="form-control" formControlName="variable" placeholder="Ej: 100234">
+                <label class="form-label fw-bold">FECHA EXPEDICIÓN INVITACIÓN</label>
+                <input type="date" class="form-control" formControlName="FechaPropuesta">
             </div>
         </div> 
+        <div class="col-md-12">
+            <div class="mb-3">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" formControlName="RequisitosPropuesta" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        REQUISITOS DE PERSONAL
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Vectores</a></li>
+                        <li><a class="dropdown-item" href="#">Administrativos y Conductores</a></li>
+                        <li><a class="dropdown-item" href="#">Salud</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-
 </form>

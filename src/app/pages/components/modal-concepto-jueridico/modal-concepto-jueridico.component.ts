@@ -17,7 +17,8 @@ export class ModalConceptoJueridicoComponent {
      
     
     this.registro = this.fb.group({ 
-      variable: ['', Validators.required] 
+      FechaConcepto: ['', Validators.required],
+      NITConcepto: ['', Validators.required]
     });
   }
   

@@ -1,11 +1,14 @@
 <form [formGroup]="registro" (ngSubmit)="guardar()">
     <div class="row">
         <div class="col-md-12">
-            <div class="mb-3">
-            <label class="form-label fw-bold">NÚMERO CssDP</label>
-            <input type="text" class="form-control" formControlName="variable" placeholder="Ej: 100234">
-            </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold">FECHA EXPEDICIÓN INVITACIÓN</label>
+          <input type="date" class="form-control" formControlName="FechaConcepto">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold">NIT</label>
+          <input type="text" class="form-control" formControlName="NITConcepto" placeholder="Ej: 1000002002">
+        </div>
         </div> 
     </div>
-
 </form>

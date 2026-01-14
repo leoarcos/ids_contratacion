@@ -19,11 +19,12 @@ import { ModalConceptoJueridicoComponent } from '../components/modal-concepto-ju
 import { ModalDesignacionComponent } from '../components/modal-designacion/modal-designacion.component';
 import { ModalPropuestaComponent } from '../components/modal-propuesta/modal-propuesta.component';  
 import { ModalClausuladoComponent } from '../components/modal-clausulado/modal-clausulado.component';
+import { ModalIdoneidadExpComponent } from "../components/modal-idoneidad-exp/modal-idoneidad-exp.component";
 
 @Component({
   selector: 'app-estructuradores',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, NgSelectModule, ModalInvitacionComponent, ModalActaAprobacionComponent, ModalActaInicioComponent, ModalCRPComponent, ModalConceptoJueridicoComponent, ModalDesignacionComponent, ModalPropuestaComponent, ModalClausuladoComponent],
+  imports: [CommonModule, FormsModule, HttpClientModule, NgSelectModule, ModalInvitacionComponent, ModalActaAprobacionComponent, ModalActaInicioComponent, ModalCRPComponent, ModalConceptoJueridicoComponent, ModalDesignacionComponent, ModalPropuestaComponent, ModalClausuladoComponent, ModalIdoneidadExpComponent],
   templateUrl: './estructuradores.component.html',
   styleUrl: './estructuradores.component.css'
 })
