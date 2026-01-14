@@ -1,11 +1,207 @@
 <form [formGroup]="registro" (ngSubmit)="guardar()">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="mb-3">
-            <label class="form-label fw-bold">NÚMERO CssDP</label>
-            <input type="text" class="form-control" formControlName="variable" placeholder="Ej: 100234">
-            </div>
+  <div class="row">
+    <label class="form-label fw-bold">Información de Contratista</label>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">FECHA EXPEDICIÓN</label>
+          <input type="date" class="form-control" formControlName="FechaAprovacion" placeholder="Ej: 20/02/2024">
+        </div>
+      </div>
+      <div class="col-md-12">
+          <div class="mb-3">
+              <label class="form-label fw-bold">NOMBRE COMPLETO</label>
+              <input type="text" class="form-control" formControlName="NombreAprovacion" placeholder="Ej: Juanito Alvarez Perez Parra">
+          </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">CEDÚLA DEL CONTRATISTA</label>
+          <input type="integer" class="form-control" formControlName="CC_Aprovacion" placeholder="Ej: 1000002002">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">DEPARTAMENTO DE EXPEDICIÓN DE LA CEDÚLA</label>
+          <input type="text" class="form-control" formControlName="DepartamentoCC_Aprovacion" placeholder="Ej: Cúcuta">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">CIUDAD DE EXPEDICIÓN DE LA CEDÚLA</label>
+          <input type="text" class="form-control" formControlName="CiudadCC_Aprovacion" placeholder="Ej: Cúcuta">
+        </div>
+      </div>        
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NIT</label>
+          <input type="integer" class="form-control" formControlName="NIT_Aprovacion" placeholder="Ej: 1000002002">
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">DIRECCIÓN DEL CONTRATISTA</label>
+          <input type="text" class="form-control" formControlName="DireccionAprovacion" placeholder="Ej: CLL 0 N 0 1-2 CENTRO, CÚCUTA">
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">CORREO DEL CONTRATISTA</label>
+          <input type="text" class="form-control" formControlName="CorreoAprovacion" placeholder="Ej: example@example.com">
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">TELEFONO CELULAR DEL CONTRATISTA</label>
+          <input type="integer" class="form-control" formControlName="TelefonoAprovacion" placeholder="Ej: 3109900090">
+        </div>
+      </div>
+    <label class="form-label fw-bold">Información Contractual</label>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NÚMERO DE PROCESO</label>
+          <input type="integer" class="form-control" formControlName="NumeroProcesoAprovacion" placeholder="Ej: 01234">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">FECHA DE PROCESO</label>
+          <input type="date" class="form-control" formControlName="FechaProcesoAprovacion" placeholder="Ej: 20/02/2024">
         </div> 
-    </div>
-
+      </div>
+      <div class="col-md-12">
+        <label class="form-label fw-bold">REQUISITOS DE PERSONAL</label>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" formControlName="RequisiosAprovacion" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            SELECCIONAR
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Vectores</a></li>
+            <li><a class="dropdown-item" href="#">Administrativos y Conductores</a></li>
+            <li><a class="dropdown-item" href="#">Salud</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">VALOR DE CONTRATO</label>
+          <input type="integer" class="form-control" formControlName="ValorContratoAprovacion" placeholder="Ej: 1000002002">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">PLAZO DE CONTRATO</label>
+          <input type="integer" class="form-control" formControlName="PlazoContratoAprovacion" placeholder="Ej: 1000002002">
+          <label class="form-label">meses</label>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">OBJETO</label>
+          <input type="text" class="form-control" formControlName="ObjetoAprovacion" placeholder="Ej: example@example.com">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NÚMERO DE CDP</label>
+          <input type="integer" class="form-control" formControlName="NumeroCDPAprovacion" placeholder="Ej: 01234">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">FECHA DE CDP</label>
+          <input type="date" class="form-control" formControlName="FechaCDPAprovacion" placeholder="Ej: 20/02/2024">
+        </div> 
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">RUBRO</label>
+          <input type="text" class="form-control" formControlName="RubroAprovacion" placeholder="Ej: 01234">
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">OBLIGACIONES ESPECIFICAS</label>
+          <input type="text" class="form-control" formControlName="ObligacionesEspecificasAprovacion" placeholder="Ej: example@example.com">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NÚMERO DE POLIZA</label>
+          <input type="integer" class="form-control" formControlName="NumeroPolizaAprovacion" placeholder="Ej: 01234">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">FECHA DE POLIZA</label>
+          <input type="date" class="form-control" formControlName="FechaPolizaAprovacion" placeholder="Ej: 20/02/2024">
+        </div> 
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">COMPAÑIA</label>
+          <input type="text" class="form-control" formControlName="CompaniaAprovacion" placeholder="Ej: 1000002002">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NIT DE LA COMPAÑIA</label>
+          <input type="integer" class="form-control" formControlName="CompaniaNITAprovacion" placeholder="Ej: 1000002002">
+        </div>
+      </div>
+      <label class="form-label fw-bold">VIGENCIA</label>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">DESDE</label>
+          <input type="date" class="form-control" formControlName="FechaDEinicio" placeholder="Ej: 20/02/2024">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">HASTA</label>
+          <input type="date" class="form-control" formControlName="FechaDEfin" placeholder="Ej: 20/02/2024">
+        </div> 
+      </div>
+      <div class="col-md-12">
+          <div class="mb-3">
+              <label class="form-label fw-bold">OBSERVACIONES</label>
+              <input type="text" class="form-control" formControlName="ObservacionesAprovacion" placeholder="Ej: Juanito Alvarez Perez Parra">
+          </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">RESPONSABLE</label>
+            <input type="text" class="form-control mb-2" formControlName="ResponsableAprovacion" name="nombreProyecto" placeholder="Nombre">
+            <select class="form-select mb-2" formControlName="CargoResponsableAprovacion" name="cargoProyecto" placeholder="Cargo">
+                <option value="">Seleccionar</option>
+              <option value="Auxiliar Administrativo">Auxiliar Administrativo</option>
+                <option value="Profesional Universitario">Profesional Universitario</option>
+                <option value="Profesional Especializado">Profesional Especializado</option>
+            </select>
+          </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">ELABORO</label>
+            <input type="text" class="form-control mb-2" formControlName="ElaboroAprovacion" name="nombreProyecto" placeholder="Nombre">
+            <select class="form-select mb-2" formControlName="CargoElaboroAprovacion" name="cargoProyecto" placeholder="Cargo">
+                <option value="">Seleccionar</option>
+              <option value="Auxiliar Administrativo">Auxiliar Administrativo</option>
+                <option value="Profesional Universitario">Profesional Universitario</option>
+                <option value="Profesional Especializado">Profesional Especializado</option>
+            </select>
+          </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">REVISO</label>      
+            <input type="text" class="form-control mb-2" formControlName="RevisoAprovacion" name="nombreProyecto" placeholder="Nombre">
+            <select class="form-select mb-2" formControlName="CargoRevisoAprovacion" name="cargoProyecto" placeholder="Cargo">
+                <option value="">Seleccionar</option>
+              <option value="Auxiliar Administrativo">Auxiliar Administrativo</option>
+                <option value="Profesional Universitario">Profesional Universitario</option>
+                <option value="Profesional Especializado">Profesional Especializado</option>
+            </select>
+        </div>
+      </div>
+  </div>
 </form>

@@ -14,10 +14,28 @@ export class ModalPropuestaComponent {
   registro!: FormGroup;
   constructor(private fb: FormBuilder) { }
   ngOnInit(): void {
-     
-    
-    this.registro = this.fb.group({ 
-      variable: ['', Validators.required] 
+    this.registro = this.fb.group({
+      FechaPropuesta: ['', Validators.required],
+      NombrePropuesta: ['', Validators.required],
+      CCPropuesta: ['', Validators.required],
+      CC_CiudadPropuesta: ['', Validators.required],
+      NITPropuesta: ['', Validators.required],
+      DireccionPropuesta: ['', Validators.required],
+      CorreoPropuesta: ['', Validators.required],
+      TelefonoPropuesta: ['', Validators.required],
+      NumeroProcesoPropuesta: ['', Validators.required],
+      RequisiosPropuesta: ['', Validators.required],
+      ValorContratoPropuesta: ['', Validators.required],
+      PlazoContratoPropuesta: ['', Validators.required],
+      ObjetoPropuesta: ['', Validators.required],
+      NumeroCDPPropuesta: ['', Validators.required],
+      FechaCDPPropuesta: ['', Validators.required],
+      RubroPropuesta: ['', Validators.required],
+      ObligacionesEspecificasPropuesta: ['', Validators.required],
+      ElaboroPropuesta: ['', Validators.required],
+      CargoElaboroPropuesta: ['', Validators.required],
+      RevisoPropuesta: ['', Validators.required],
+      CargoRevisoPropuesta: ['', Validators.required]
     });
   }
   

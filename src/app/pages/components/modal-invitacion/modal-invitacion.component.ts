@@ -16,8 +16,21 @@ export class ModalInvitacionComponent {
   ngOnInit(): void {
      
     
-    this.registro = this.fb.group({ 
-      variable: ['', Validators.required] 
+    this.registro = this.fb.group({
+      FechaInvitacion: ['', Validators.required],
+      NombreInvitacion: ['', Validators.required],
+      CCInvitacion: ['', Validators.required],
+      CC_CiudadInvitacion: ['', Validators.required],
+      NITInvitacion: ['', Validators.required],
+      DireccionInvitacion: ['', Validators.required],
+      CorreoInvitacion: ['', Validators.required],
+      TelefonoInvitacion: ['', Validators.required],
+      NumeroProcesoInvitacion: ['', Validators.required],
+      RequisiosInvitacion: ['', Validators.required],
+      ElaboroInvitacion: ['', Validators.required],
+      CargoElaboroInvitacion: ['', Validators.required],
+      RevisoInvitacion: ['', Validators.required],
+      CargoRevisoInvitacion: ['', Validators.required]
     });
   }
   
