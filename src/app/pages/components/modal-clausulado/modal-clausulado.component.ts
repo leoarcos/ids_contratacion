@@ -14,10 +14,28 @@ export class ModalClausuladoComponent {
   registro!: FormGroup;
   constructor(private fb: FormBuilder) { }
   ngOnInit(): void {
-     
-    
-    this.registro = this.fb.group({ 
-      variable: ['', Validators.required] 
+    this.registro = this.fb.group({
+      FechaClausulado: ['', Validators.required],
+      NombreClausulado: ['', Validators.required],
+      CCClausulado: ['', Validators.required],
+      CC_CiudadClausulado: ['', Validators.required],
+      NITClausulado: ['', Validators.required],
+      DireccionClausulado: ['', Validators.required],
+      CorreoClausulado: ['', Validators.required],
+      TelefonoClausulado: ['', Validators.required],
+      NumeroProcesoClausulado: ['', Validators.required],
+      RequisiosClausulado: ['', Validators.required],
+      ValorContratoClausulado: ['', Validators.required],
+      PlazoContratoClausulado: ['', Validators.required],
+      ObjetoClausulado: ['', Validators.required],
+      NumeroCDPClausulado: ['', Validators.required],
+      FechaCDPClausulado: ['', Validators.required],
+      RubroClausulado: ['', Validators.required],
+      ObligacionesEspecificasClausulado: ['', Validators.required],
+      ElaboroClausulado: ['', Validators.required],
+      CargoElaboroClausulado: ['', Validators.required],
+      RevisoClausulado: ['', Validators.required],
+      CargoRevisoClausulado: ['', Validators.required]
     });
   }
   

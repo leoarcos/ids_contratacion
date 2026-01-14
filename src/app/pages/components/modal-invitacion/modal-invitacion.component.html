@@ -1,77 +1,152 @@
 <form [formGroup]="registro" (ngSubmit)="guardar()">
-    <div class="row">
-        <div class="col-md-12">
-          <div class="mb-3">
-            <label class="form-label fw-bold">FECHA EXPEDICIÓN INVITACIÓN</label>
-            <input type="date" class="form-control" formControlName="FechaInvitacion" placeholder="Ej: 20/02/2024">
-          </div>
-        </div>
-        <div class="col-md-12">
+  <div class="row">
+    <label class="form-label fw-bold">Información de Contratista</label>
+      <div class="col-md-12">
         <div class="mb-3">
-            <label class="form-label fw-bold">NOMBRE COMPLETO</label>
-            <input type="text" class="form-control" formControlName="NombreInvitacion" placeholder="Ej: Juanito Alvarez Perez Parra">
-          </div>
-        </div>
-        <div class="col-md-12">
-          <div class="mb-3">
-            <label class="form-label fw-bold">CEDÚLA DEL CONTRATISTA</label>
-            <input type="integer" class="form-control" formControlName="CCInvitacion" placeholder="Ej: 1000002002">
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label class="form-label fw-bold">DEPARTAMENTO DE EXPEDICIÓN DE LA CEDÚLA</label>
-            <input type="text" class="form-control" formControlName="CC_CiudadInvitacion" placeholder="Ej: Cúcuta">
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label class="form-label fw-bold">CIUDAD DE EXPEDICIÓN DE LA CEDÚLA</label>
-            <input type="text" class="form-control" formControlName="CC_CiudadInvitacion" placeholder="Ej: Cúcuta">
-          </div>
-        </div>
-        <div class="col-md-12">
-          <div class="mb-3">
-            <label class="form-label fw-bold">DIRECCIÓN DEL CONTRATISTA</label>
-            <input type="text" class="form-control" formControlName="DireccionInvitacion" placeholder="Ej: CLL 0 N 0 1-2 CENTRO, CÚCUTA">
-          </div>
-        </div>
-        <div class="col-md-12">
-          <div class="mb-3">
-            <label class="form-label fw-bold">CORREO DEL CONTRATISTA</label>
-            <input type="text" class="form-control" formControlName="CorreoInvitacion" placeholder="Ej: example@example.com">
-          </div>
-        </div>
-        <div class="col-md-12">
-          <div class="mb-3">
-            <label class="form-label fw-bold">TELEFONO CELULAR DEL CONTRATISTA</label>
-            <input type="integer" class="form-control" formControlName="TelefonoInvitacion" placeholder="Ej: 3109900090">
-          </div>
-        </div>
-        <div class="col-md-12">
-          <div class="mb-3">
-            <label class="form-label fw-bold">NÚMERO DE PROCESO</label>
-            <input type="integer" class="form-control" formControlName="NumeroProcesoInvitacion" placeholder="Ej: 01234">
-          </div>
-         
-          <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" formControlName="RequisiosInvitacion" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              REQUISITOS DE PERSONAL
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Vectores</a></li>
-              <li><a class="dropdown-item" href="#">Administrativos y Conductores</a></li>
-              <li><a class="dropdown-item" href="#">Salud</a></li>
-            </ul>
-          </div>
-        <div class="mb-3">
-          <label class="form-label fw-bold">ELABORO</label>
-          <input type="text" class="form-control" formControlName="ElaboroInvitacion" placeholder="Ej: Juanito Alvarez Perez Parra">
-        </div>
-        <div class="mb-3">
-          <label class="form-label fw-bold">REVISO</label>
-          <input type="text" class="form-control" formControlName="RevisoInvitacion" placeholder="Ej: Juanito Alvarez Perez Parra">
+          <label class="form-label fw-bold">FECHA EXPEDICIÓN INVITACIÓN</label>
+          <input type="date" class="form-control" formControlName="FechaInvitacion" placeholder="Ej: 20/02/2024">
         </div>
       </div>
-    </div>
+      <div class="col-md-12">
+          <div class="mb-3">
+              <label class="form-label fw-bold">NOMBRE COMPLETO</label>
+              <input type="text" class="form-control" formControlName="NombreInvitacion" placeholder="Ej: Juanito Alvarez Perez Parra">
+          </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">CEDÚLA DEL CONTRATISTA</label>
+          <input type="integer" class="form-control" formControlName="CCInvitacion" placeholder="Ej: 1000002002">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">DEPARTAMENTO DE EXPEDICIÓN DE LA CEDÚLA</label>
+          <input type="text" class="form-control" formControlName="CC_CiudadInvitacion" placeholder="Ej: Cúcuta">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">CIUDAD DE EXPEDICIÓN DE LA CEDÚLA</label>
+          <input type="text" class="form-control" formControlName="CC_CiudadInvitacion" placeholder="Ej: Cúcuta">
+        </div>
+      </div>        
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NIT</label>
+          <input type="integer" class="form-control" formControlName="NITInvitacion" placeholder="Ej: 1000002002">
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">DIRECCIÓN DEL CONTRATISTA</label>
+          <input type="text" class="form-control" formControlName="DireccionInvitacion" placeholder="Ej: CLL 0 N 0 1-2 CENTRO, CÚCUTA">
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">CORREO DEL CONTRATISTA</label>
+          <input type="text" class="form-control" formControlName="CorreoInvitacion" placeholder="Ej: example@example.com">
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">TELEFONO CELULAR DEL CONTRATISTA</label>
+          <input type="integer" class="form-control" formControlName="TelefonoInvitacion" placeholder="Ej: 3109900090">
+        </div>
+      </div>
+    <label class="form-label fw-bold">Información Contractual</label>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NÚMERO DE PROCESO</label>
+          <input type="integer" class="form-control" formControlName="NumeroProcesoInvitacion" placeholder="Ej: 01234">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">FECHA DE PROCESO</label>
+          <input type="date" class="form-control" formControlName="FechaInvitacion" placeholder="Ej: 20/02/2024">
+        </div> 
+      </div>
+      <div class="col-md-12">
+        <label class="form-label fw-bold">REQUISITOS DE PERSONAL</label>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" formControlName="RequisiosInvitacion" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            SELECCIONAR
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Vectores</a></li>
+            <li><a class="dropdown-item" href="#">Administrativos y Conductores</a></li>
+            <li><a class="dropdown-item" href="#">Salud</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">VALOR DE CONTRATO</label>
+          <input type="integer" class="form-control" formControlName="NITInvitacion" placeholder="Ej: 1000002002">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">PLAZO DE CONTRATO</label>
+          <input type="integer" class="form-control" formControlName="NITInvitacion" placeholder="Ej: 1000002002">
+          <label class="form-label">meses</label>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">OBJETO</label>
+          <input type="text" class="form-control" formControlName="CorreoInvitacion" placeholder="Ej: example@example.com">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">NÚMERO DE CDP</label>
+          <input type="integer" class="form-control" formControlName="NumeroProcesoInvitacion" placeholder="Ej: 01234">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">FECHA DE CDP</label>
+          <input type="date" class="form-control" formControlName="FechaInvitacion" placeholder="Ej: 20/02/2024">
+        </div> 
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">RUBRO</label>
+          <input type="text" class="form-control" formControlName="NumeroProcesoInvitacion" placeholder="Ej: 01234">
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-3">
+          <label class="form-label fw-bold">OBLIGACIONES ESPECIFICAS</label>
+          <input type="text" class="form-control" formControlName="CorreoInvitacion" placeholder="Ej: example@example.com">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">ELABORO</label>
+            <input type="text" class="form-control mb-2" formControlName="ElaboroInvitacion" name="nombreProyecto" placeholder="Nombre">
+            <select class="form-select mb-2" formControlName="CargoElaboroInvitacion" name="cargoProyecto" placeholder="Cargo">
+                <option value="">Seleccionar</option>
+              <option value="Auxiliar Administrativo">Auxiliar Administrativo</option>
+                <option value="Profesional Universitario">Profesional Universitario</option>
+                <option value="Profesional Especializado">Profesional Especializado</option>
+            </select>
+          </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label class="form-label fw-bold">REVISO</label>      
+            <input type="text" class="form-control mb-2" formControlName="RevisoInvitacion" name="nombreProyecto" placeholder="Nombre">
+            <select class="form-select mb-2" formControlName="CargoRevisoInvitacion" name="cargoProyecto" placeholder="Cargo">
+                <option value="">Seleccionar</option>
+              <option value="Auxiliar Administrativo">Auxiliar Administrativo</option>
+                <option value="Profesional Universitario">Profesional Universitario</option>
+                <option value="Profesional Especializado">Profesional Especializado</option>
+            </select>
+        </div>
+      </div>
+  </div>
 </form>

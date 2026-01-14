@@ -14,10 +14,28 @@ export class ModalActaInicioComponent {
   registro!: FormGroup;
   constructor(private fb: FormBuilder) { }
   ngOnInit(): void {
-     
-    
-    this.registro = this.fb.group({ 
-      variable: ['', Validators.required] 
+    this.registro = this.fb.group({
+      FechaInicio: ['', Validators.required],
+      NombreInicio: ['', Validators.required],
+      CCInicio: ['', Validators.required],
+      CC_CiudadInicio: ['', Validators.required],
+      NITInicio: ['', Validators.required],
+      DireccionInicio: ['', Validators.required],
+      CorreoInicio: ['', Validators.required],
+      TelefonoInicio: ['', Validators.required],
+      NumeroProcesoInicio: ['', Validators.required],
+      RequisiosInicio: ['', Validators.required],
+      ValorContratoInicio: ['', Validators.required],
+      PlazoContratoInicio: ['', Validators.required],
+      ObjetoInicio: ['', Validators.required],
+      NumeroCDPInicio: ['', Validators.required],
+      FechaCDPInicio: ['', Validators.required],
+      RubroInicio: ['', Validators.required],
+      ObligacionesEspecificasInicio: ['', Validators.required],
+      ElaboroInicio: ['', Validators.required],
+      CargoElaboroInicio: ['', Validators.required],
+      RevisoInicio: ['', Validators.required],
+      CargoRevisoInicio: ['', Validators.required]
     });
   }
   

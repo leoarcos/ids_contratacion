@@ -14,11 +14,31 @@ export class ModalConceptoJueridicoComponent {
   registro!: FormGroup;
   constructor(private fb: FormBuilder) { }
   ngOnInit(): void {
-     
-    
-    this.registro = this.fb.group({ 
+    this.registro = this.fb.group({
       FechaConcepto: ['', Validators.required],
-      NITConcepto: ['', Validators.required]
+      NombreConcepto: ['', Validators.required],
+      CCConcepto: ['', Validators.required],
+      CC_CiudadConcepto: ['', Validators.required],
+      NITConcepto: ['', Validators.required],
+      DireccionConcepto: ['', Validators.required],
+      CorreoConcepto: ['', Validators.required],
+      TelefonoConcepto: ['', Validators.required],
+      NumeroProcesoConcepto: ['', Validators.required],
+      FechaProcesoConcepto: ['', Validators.required],
+      RequisiosConcepto: ['', Validators.required],
+      ValorContratoConcepto: ['', Validators.required],
+      PlazoContratoConcepto: ['', Validators.required],
+      ObjetoConcepto: ['', Validators.required],
+      NumeroCDPConcepto: ['', Validators.required],
+      FechaCDPConcepto: ['', Validators.required],
+      RubroConcepto: ['', Validators.required],
+      ObligacionesEspecificasConcepto: ['', Validators.required],
+      ResponsableConcepto: ['', Validators.required],
+      CargoResponsableConcepto: ['', Validators.required],
+      ElaboroConcepto: ['', Validators.required],
+      CargoElaboroConcepto: ['', Validators.required],
+      RevisoConcepto: ['', Validators.required],
+      CargoRevisoConcepto: ['', Validators.required]
     });
   }
   
